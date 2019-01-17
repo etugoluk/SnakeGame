@@ -1,6 +1,12 @@
 #include "../inc/SDL.hpp"
 
-SDL::SDL(char **map)
+SDL::SDL()
+{}
+
+SDL::~SDL()
+{}
+
+void SDL::init(char **map)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     	std::cout << "SDLDisplay::InitException" << std::endl;
@@ -54,7 +60,7 @@ SDL::SDL(char **map)
 	SDL_Delay(2000);
 }
 
-SDL::~SDL()
+void SDL::destroy()
 {
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);

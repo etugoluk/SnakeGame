@@ -1,10 +1,6 @@
-//
-// Created by Anastasiia ORJI on 2019-01-15.
-//
 
 #include "../inc/Game.hpp"
 #include "../inc/SDL.hpp"
-// #include <SDL2/SDL.h>
 
 int main(){
 
@@ -12,18 +8,9 @@ int main(){
     game.update("ta");
     game.printMap();
 
-    SDL sdl(game.getMap());
-    // if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    //     std::cout << "SDLDisplay::InitException" << std::endl;
+    SDL sdl;
 
-    // SDL_Window *w = SDL_CreateWindow("Nibbler", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900, 900, SDL_WINDOW_SHOWN);
-    // if (!w)
-    //      std::cout << "Bad window" << std::endl;
-
-    // SDL_Surface *s = SDL_GetWindowSurface(w);
-    // SDL_FillRect(s, NULL, SDL_MapRGB(s->format, 142, 223, 93));
-    // SDL_UpdateWindowSurface(w);
-    // SDL_Delay(3000);
+    sdl.init(game.getMap());
 
     SDL_Event e;
     while (1)
@@ -43,5 +30,6 @@ int main(){
         }
     }
 
+    sdl.destroy();
     return (0);
 }

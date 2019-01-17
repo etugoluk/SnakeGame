@@ -9,8 +9,10 @@ class SDL
 	// SDL_Surface *surface;
 	SDL_Texture *texture;
 public:
-	SDL(char **map);
+	SDL();
 	~SDL();
 
 	void draw(char **map);
+	void init(char **map);
+	void destroy();
 };

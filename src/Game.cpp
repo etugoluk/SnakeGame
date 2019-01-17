@@ -1,6 +1,3 @@
-//
-// Created by Anastasiia ORJI on 2019-01-16.
-//
 
 #include "../inc/Game.hpp"
 

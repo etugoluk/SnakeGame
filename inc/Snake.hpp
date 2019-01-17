@@ -1,9 +1,6 @@
-//
-// Created by Anastasiia ORJI on 2019-01-15.
-//
 
-#ifndef NIBBLER_SNAKE_HPP
-#define NIBBLER_SNAKE_HPP
+#ifndef SNAKE_HPP
+#define SNAKE_HPP
 
 #include <vector>
 #include <cstdlib>
