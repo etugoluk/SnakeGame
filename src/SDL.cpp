@@ -1,6 +1,6 @@
 #include "../inc/SDL.hpp"
 
-SDL::SDL()
+SDL::SDL(int screensize) : screensize(screensize)
 {}
 
 SDL::~SDL()
@@ -19,45 +19,11 @@ void SDL::init(char **map)
 	if (!renderer)
 		std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
 
-	SDL_Rect r;
-	r.x = 0;
-	r.y = 0;
-	r.w = 70;
-	r.h = 70;
-
-	SDL_RenderClear(renderer);
-	for (int i = 0; i < 11; ++i)
-	{
-		for (int j = 0; j < 11; ++j)
-		{
-			r.x = i * 70;
-			r.y = j * 70;
-
-			// SDL_RenderClear(renderer);
-			SDL_QueryTexture(texture, nullptr, nullptr, &r.w, &r.h);
-			if (map[j][i] == 's')
-				SDL_SetRenderDrawColor(renderer, 150, 90, 0, 255);
-			else if (map[j][i] == 'f')
-				SDL_SetRenderDrawColor(renderer, 255, 90, 0, 255);
-			else if (map[j][i] == 'b')
-				SDL_SetRenderDrawColor(renderer, 194, 194, 214, 255);
-			else
-				SDL_SetRenderDrawColor(renderer, 142, 223, 93, 255);
-			SDL_RenderFillRect(renderer, &r);
-			SDL_RenderCopy(renderer, texture, nullptr, nullptr);
-			// SDL_RenderPresent(renderer);
-		}
-	}
-
-	// surface = SDL_LoadBMP("grass.bmp");
-	// texture = SDL_CreateTextureFromSurface(renderer, surface);
-	// SDL_FreeSurface(surface);
-
-	SDL_RenderClear(renderer);
-	// SDL_RenderCopy(renderer, texture, nullptr, nullptr);
-	SDL_RenderPresent(renderer);
-
-	SDL_Delay(2000);
+	block.x = 0;
+	block.y = 0;
+	block.w = 70;
+	block.h = 70;
+	draw(map);
 }
 
 void SDL::destroy()
@@ -70,21 +36,15 @@ void SDL::destroy()
 
 void SDL::draw(char **map)
 {
-	SDL_Rect r;
-	r.x = 0;
-	r.y = 0;
-	r.w = 70;
-	r.h = 70;
-
 	SDL_RenderClear(renderer);
-	for (int i = 0; i < 11; ++i)
+	for (int i = 0; i < screensize; ++i)
 	{
-		for (int j = 0; j < 11; ++j)
+		for (int j = 0; j < screensize; ++j)
 		{
-			r.x = i * 70;
-			r.y = j * 70;
+			block.x = i * 70;
+			block.y = j * 70;
 
-			SDL_QueryTexture(texture, nullptr, nullptr, &r.w, &r.h);
+			SDL_QueryTexture(texture, nullptr, nullptr, &block.w, &block.h);
 			if (map[j][i] == 's')
 				SDL_SetRenderDrawColor(renderer, 150, 90, 0, 255);
 			else if (map[j][i] == 'f')
@@ -93,7 +53,7 @@ void SDL::draw(char **map)
 				SDL_SetRenderDrawColor(renderer, 194, 194, 214, 255);
 			else
 				SDL_SetRenderDrawColor(renderer, 142, 223, 93, 255);
-			SDL_RenderFillRect(renderer, &r);
+			SDL_RenderFillRect(renderer, &block);
 			SDL_RenderCopy(renderer, texture, nullptr, nullptr);
 		}
 	}

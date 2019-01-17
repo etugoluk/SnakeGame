@@ -8,7 +8,7 @@ int main(){
     game.update("ta");
     game.printMap();
 
-    SDL sdl;
+    SDL sdl(11);
 
     sdl.init(game.getMap());
 

@@ -4,15 +4,19 @@
 
 class SDL
 {
+	int screensize;
+
 	SDL_Window *window;
 	SDL_Renderer *renderer;
-	// SDL_Surface *surface;
 	SDL_Texture *texture;
+
+	SDL_Rect block;
+
 public:
-	SDL();
+	SDL(int);
 	~SDL();
 
-	void draw(char **map);
 	void init(char **map);
 	void destroy();
+	void draw(char **map);
 };
