@@ -11,7 +11,7 @@ void SDL::init(char **map)
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     	std::cout << "SDLDisplay::InitException" << std::endl;
 
-    window = SDL_CreateWindow("Nibbler", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 840, 840, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Nibbler", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, BLOCK_SIZE * screensize, BLOCK_SIZE * screensize , SDL_WINDOW_SHOWN);
     if (!window)
          std::cout << "Bad window" << std::endl;
 
@@ -21,8 +21,8 @@ void SDL::init(char **map)
 
 	block.x = 0;
 	block.y = 0;
-	block.w = 70;
-	block.h = 70;
+	block.w = BLOCK_SIZE;
+	block.h = BLOCK_SIZE;
 	draw(map);
 }
 
@@ -41,8 +41,8 @@ void SDL::draw(char **map)
 	{
 		for (int j = 0; j < screensize; ++j)
 		{
-			block.x = i * 70;
-			block.y = j * 70;
+			block.x = i * BLOCK_SIZE;
+			block.y = j * BLOCK_SIZE;
 
 			SDL_QueryTexture(texture, nullptr, nullptr, &block.w, &block.h);
 			if (map[j][i] == 's')

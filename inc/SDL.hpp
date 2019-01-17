@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#define BLOCK_SIZE 70
+
 class SDL
 {
 	int screensize;
