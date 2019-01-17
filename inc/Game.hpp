@@ -17,7 +17,7 @@ public:
     void printMap();
 
     void createFood();
-    void createBarriers();
+    void createBarriers(long size);
 
     bool checkCollisions();
 
