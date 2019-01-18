@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#define BLOCK_SIZE 70
+#define SCREENWIDTH 900
 #define INFO_SIZE 300
 
 #include "Game.hpp"
@@ -11,6 +11,7 @@
 class SDL
 {
 	int screensize;
+	int blocksize;
 
 	SDL_Window *window;
 	SDL_Surface *surface;
@@ -35,4 +36,6 @@ public:
 	void destroy();
 	void draw(char **map);
 	void execute(Game &game);
+
+	void set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel);
 };

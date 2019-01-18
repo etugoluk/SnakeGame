@@ -5,11 +5,11 @@ Game::Game(long screenLength) {
     srand(unsigned(std::time(0)));
     this->screenLength = screenLength;
     score = 0;
-    level = 0;
+    level = 1;
     createMap();
     snake = Snake(screenLength);
     fillMap();
-    createBarriers(screenLength * screenLength / 30);
+    createBarriers(screenLength / 4);
     createFood();
 }
 
@@ -81,7 +81,7 @@ Game::update(char c) {
     if (checkCollisions())
         return false;
 //  add snake to map
-    for(auto v : snakeBody)
+    for (auto v : snakeBody)
         map[v.second][v.first] = 's';
     return true;
 }

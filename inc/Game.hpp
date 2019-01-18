@@ -25,13 +25,14 @@ public:
 
     char **getMap();
 
+    Snake snake;
+    int level;
 private:
     Game();
     long screenLength;
     int score;
-    int level;
     char **map;
-    Snake snake;
+    // Snake snake;
 
 };
 
