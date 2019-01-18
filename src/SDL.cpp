@@ -7,7 +7,7 @@ SDL::SDL(int screensize) : screensize(screensize)
 SDL::~SDL()
 {}
 
-void SDL::init(char **map)
+void SDL::init(char **map, Game &game)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     	std::cout << "SDLDisplay::InitException" << std::endl;
@@ -28,9 +28,10 @@ void SDL::init(char **map)
     block = {0, 0, blocksize, blocksize};
     info = {blocksize * screensize, 0, INFO_SIZE, blocksize * screensize};
 
-    font = TTF_OpenFont("font/ARIAL.TTF", 24);
+    TTF_Init();
+    font = TTF_OpenFont("font/Arial.ttf", 24);
 
-	draw(map);
+	draw(map, game);
 }
 
 void SDL::destroy()
@@ -53,7 +54,7 @@ void     SDL::set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel)
 	}
 }
 
-void SDL::draw(char **map)
+void SDL::draw(char **map, Game &game)
 {
 	for (int i = 0; i < screensize; ++i)
 	{
@@ -62,19 +63,23 @@ void SDL::draw(char **map)
 			if (map[j][i] == 's')
 				set_pixel(surface, i * blocksize, j * blocksize, 0xf4ee00);
 			else if (map[j][i] == 'f')
-				set_pixel(surface, i * blocksize, j * blocksize, 0xFF5A00);
+				set_pixel(surface, i * blocksize, j * blocksize, 0xff6600);
 			else if (map[j][i] == 'b')
-				set_pixel(surface, i * blocksize, j * blocksize, 0xC2C2D6);
+				set_pixel(surface, i * blocksize, j * blocksize, 0xe69900);
+			else if (map[j][i] == '.' && ((!(j % 2) && !(i % 2)) || ((j % 2) && (i % 2))))
+				set_pixel(surface, i * blocksize, j * blocksize, 0xb5dc00);
 			else
-				set_pixel(surface, i * blocksize, j * blocksize, 0x8EDF5D);
+				set_pixel(surface, i * blocksize, j * blocksize, 0xaadc00);
 		}
 	}
 
-	SDL_Surface *TTF_TextSolid = TTF_RenderText_Solid(font, "SCORE", color_text);
+	std::string inf = "SCORE: " + std::to_string(game.score) + " LEVEL: " + std::to_string(game.level);
+	SDL_Surface *TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &info);
 	SDL_FreeSurface(TTF_TextSolid);
 
 	SDL_UpdateWindowSurface(window);
+	SDL_memset(surface->pixels, 0, surface->h * surface->pitch);
 }
 
 void SDL::execute(Game &game)
@@ -132,7 +137,7 @@ void SDL::execute(Game &game)
 	    }
     	if (!game.update(ch))
         	return ;
-        draw(game.getMap());
+        draw(game.getMap(), game);
         usleep(300000 / game.level);
 	}
 }

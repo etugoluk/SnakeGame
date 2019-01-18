@@ -32,9 +32,9 @@ public:
 	SDL(int);
 	~SDL();
 
-	void init(char **map);
+	void init(char **map, Game &game);
 	void destroy();
-	void draw(char **map);
+	void draw(char **map, Game &game);
 	void execute(Game &game);
 
 	void set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel);

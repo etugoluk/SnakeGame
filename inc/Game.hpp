@@ -27,12 +27,11 @@ public:
 
     Snake snake;
     int level;
+    int score;
 private:
     Game();
     long screenLength;
-    int score;
     char **map;
-    // Snake snake;
 
 };
 
