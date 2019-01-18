@@ -11,60 +11,74 @@ void SDL::init(char **map)
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     	std::cout << "SDLDisplay::InitException" << std::endl;
 
-    window = SDL_CreateWindow("Nibbler", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, BLOCK_SIZE * screensize, BLOCK_SIZE * screensize , SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Nibbler", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, BLOCK_SIZE * screensize + INFO_SIZE, BLOCK_SIZE * screensize , SDL_WINDOW_SHOWN);
     if (!window)
          std::cout << "Bad window" << std::endl;
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (!renderer)
-		std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
+    surface = SDL_GetWindowSurface(window);
 
-	block.x = 0;
-	block.y = 0;
-	block.w = BLOCK_SIZE;
-	block.h = BLOCK_SIZE;
+ //    color_snake = {150, 90, 0, 255};
+	// color_ground = {142, 223, 93, 255};
+	// color_food = {255, 90, 0, 255};
+	// color_barrier = {194, 194, 214, 255};
+	color_text = {255, 255, 255, 255};
+	// color_info_block = {0, 0, 0, 255};
+
+    block = {0, 0, BLOCK_SIZE, BLOCK_SIZE};
+    info = {BLOCK_SIZE * screensize, 0, INFO_SIZE, BLOCK_SIZE * screensize};
+
+    font = TTF_OpenFont("font/ARIAL.TTF", 24);
+
 	draw(map);
 }
 
 void SDL::destroy()
 {
-	SDL_DestroyTexture(texture);
-	SDL_DestroyRenderer(renderer);
+	TTF_CloseFont(font);
+	SDL_FreeSurface(surface);
 	SDL_DestroyWindow(window);
     SDL_Quit();
 }
 
+void     set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel)
+{
+	for (int x = i; x < i + BLOCK_SIZE; ++x)
+	{
+		for (int y = j; y < j + BLOCK_SIZE; ++y)
+		{
+			Uint8 *target_pixel = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
+    		*(Uint32 *)target_pixel = pixel;
+		}
+	}
+}
+
 void SDL::draw(char **map)
 {
-	SDL_RenderClear(renderer);
 	for (int i = 0; i < screensize; ++i)
 	{
 		for (int j = 0; j < screensize; ++j)
 		{
-			block.x = i * BLOCK_SIZE;
-			block.y = j * BLOCK_SIZE;
-
-			SDL_QueryTexture(texture, nullptr, nullptr, &block.w, &block.h);
 			if (map[j][i] == 's')
-				SDL_SetRenderDrawColor(renderer, 150, 90, 0, 255);
+				set_pixel(surface, i * BLOCK_SIZE, j * BLOCK_SIZE, 0x965A00);
 			else if (map[j][i] == 'f')
-				SDL_SetRenderDrawColor(renderer, 255, 90, 0, 255);
+				set_pixel(surface, i * BLOCK_SIZE, j * BLOCK_SIZE, 0xFF5A00);
 			else if (map[j][i] == 'b')
-				SDL_SetRenderDrawColor(renderer, 194, 194, 214, 255);
+				set_pixel(surface, i * BLOCK_SIZE, j * BLOCK_SIZE, 0xC2C2D6);
 			else
-				SDL_SetRenderDrawColor(renderer, 142, 223, 93, 255);
-			SDL_RenderFillRect(renderer, &block);
-			SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+				set_pixel(surface, i * BLOCK_SIZE, j * BLOCK_SIZE, 0x8EDF5D);
 		}
 	}
-	SDL_RenderPresent(renderer);
+
+	SDL_Surface *TTF_TextSolid = TTF_RenderText_Solid(font, "SCORE", color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &info);
+	SDL_FreeSurface(TTF_TextSolid);
+
 	SDL_UpdateWindowSurface(window);
 }
 
 void SDL::execute(Game &game)
 {
 	char ch = 0;
-
 
 	while (1)
 	{
