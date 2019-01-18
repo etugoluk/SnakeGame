@@ -18,16 +18,14 @@ void SDL::init(char **map, Game &game)
 
     surface = SDL_GetWindowSurface(window);
     blocksize = SCREENWIDTH / screensize;
- //    color_snake = {150, 90, 0, 255};
-	// color_ground = {142, 223, 93, 255};
-	// color_food = {255, 90, 0, 255};
-	// color_barrier = {194, 194, 214, 255};
-	color_text = {255, 255, 255, 255};
-	// color_info_block = {0, 0, 0, 255};
 
+	color_text = {255, 255, 255, 255};
     block = {0, 0, blocksize, blocksize};
     info = {blocksize * screensize, 0, INFO_SIZE, blocksize * screensize};
 
+    food = SDL_LoadBMP("images/food.bmp");
+    if (!food)
+    	std::cout << SDL_GetError() << std::endl;
     TTF_Init();
     font = TTF_OpenFont("font/Arial.ttf", 24);
 
@@ -38,6 +36,7 @@ void SDL::destroy()
 {
 	TTF_CloseFont(font);
 	SDL_FreeSurface(surface);
+	SDL_FreeSurface(food);
 	SDL_DestroyWindow(window);
     SDL_Quit();
 }
@@ -56,6 +55,7 @@ void     SDL::set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel)
 
 void SDL::draw(char **map, Game &game)
 {
+	std::cout << map[0][0] << std::endl;
 	for (int i = 0; i < screensize; ++i)
 	{
 		for (int j = 0; j < screensize; ++j)
@@ -63,7 +63,12 @@ void SDL::draw(char **map, Game &game)
 			if (map[j][i] == 's')
 				set_pixel(surface, i * blocksize, j * blocksize, 0xf4ee00);
 			else if (map[j][i] == 'f')
-				set_pixel(surface, i * blocksize, j * blocksize, 0xff6600);
+			{
+				img = {i * blocksize, j * blocksize, blocksize, blocksize};
+				SDL_BlitSurface(food, NULL, surface, &img);
+				SDL_UpdateWindowSurface(window);
+				// set_pixel(surface, i * blocksize, j * blocksize, 0xff6600);
+			}
 			else if (map[j][i] == 'b')
 				set_pixel(surface, i * blocksize, j * blocksize, 0xe69900);
 			else if (map[j][i] == '.' && ((!(j % 2) && !(i % 2)) || ((j % 2) && (i % 2))))

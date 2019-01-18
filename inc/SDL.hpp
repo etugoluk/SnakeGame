@@ -15,16 +15,12 @@ class SDL
 
 	SDL_Window *window;
 	SDL_Surface *surface;
-
-	// SDL_Color color_snake;
-	// SDL_Color color_ground;
-	// SDL_Color color_food;
-	// SDL_Color color_barrier;
+	SDL_Surface *food;
 	SDL_Color color_text;
-	// SDL_Color color_info_block;
 
 	SDL_Rect block;
 	SDL_Rect info;
+	SDL_Rect img;
 
 	TTF_Font* font;
 

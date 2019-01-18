@@ -11,11 +11,9 @@ int main(){
     game.printMap();
 
     SDL sdl(map_size);
-
     sdl.init(game.getMap(), game);
-
     sdl.execute(game);
-
     sdl.destroy();
+
     return (0);
 }
