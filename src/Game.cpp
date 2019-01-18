@@ -45,7 +45,7 @@ Game::printMap() {
 }
 
 bool
-Game::update(std::string c) {
+Game::update(char c) {
     std::cout << "Score = " << score << std::endl;
 
 //  extendTail
@@ -59,13 +59,13 @@ Game::update(std::string c) {
     for (auto v : snakeBody)
         map[v.second][v.first] = '.';
 //  move snake
-    if (c == "w")
+    if (c == 'w' || c == 126)
         snake.moveSnake(UpArrow);
-    else if (c == "s")
+    else if (c == 's' || c == 125)
         snake.moveSnake(DownArrow);
-    else if (c == "a")
+    else if (c == 'a' || c == 123)
         snake.moveSnake(LeftArrow);
-    else if (c == "d")
+    else if (c == 'd' || c == 124)
         snake.moveSnake(RightArrow);
     //else snake.moveHeadByDirection()
     snakeBody = snake.getBody();

@@ -60,3 +60,51 @@ void SDL::draw(char **map)
 	SDL_RenderPresent(renderer);
 	SDL_UpdateWindowSurface(window);
 }
+
+void SDL::execute(Game &game)
+{
+	char ch = 0;
+
+
+	while (1)
+	{
+		SDL_Event e;
+		while (SDL_PollEvent(&e))
+	    {
+        	if (e.type == SDL_KEYDOWN)
+        	{
+        		switch (e.key.keysym.sym)
+        		{
+        			case SDLK_RIGHT:
+		                std::cout << "right" << std::endl;
+		                ch = 124;
+		                break;
+		            case SDLK_DOWN:
+		                std::cout << "down" << std::endl;
+		                ch = 125;
+		                break;
+		            case SDLK_LEFT:
+		                std::cout << "left" << std::endl;
+		                ch = 123;
+		                break;
+		            case SDLK_UP:
+		                std::cout << "up" << std::endl;
+		                ch = 126;
+		                break;
+		            case SDLK_ESCAPE:
+		            	return ;
+               			break;
+		            default:
+		                ch = 0;
+		                break;
+        		}
+        		std::cout << ch << std::endl;
+		        if (!game.update(ch))
+		        	return ;
+		        draw(game.getMap());
+        	}
+            if (e.type == SDL_QUIT)
+                return ;
+	    }
+	}
+}
