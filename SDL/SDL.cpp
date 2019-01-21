@@ -13,7 +13,7 @@ SDL::SDL(int screensize) : IGUI(screensize)
 SDL::~SDL()
 {}
 
-void SDL::init(char **map, Game &game)
+void SDL::init(char **map)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     	std::cout << "SDLDisplay::InitException" << std::endl;
@@ -35,7 +35,7 @@ void SDL::init(char **map, Game &game)
     // TTF_Init();
     // font = TTF_OpenFont("font/Arial.ttf", 24);
 
-	draw(map, game);
+	draw(map);
 }
 
 void SDL::destroy()
@@ -59,9 +59,8 @@ void     SDL::set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel)
 	}
 }
 
-void SDL::draw(char **map, Game &game)
+void SDL::draw(char **map)
 {
-	std::cout << map[0][0] << std::endl;
 	for (int i = 0; i < screensize; ++i)
 	{
 		for (int j = 0; j < screensize; ++j)
@@ -83,7 +82,7 @@ void SDL::draw(char **map, Game &game)
 				set_pixel(surface, i * blocksize, j * blocksize, 0xaadc00);
 		}
 	}
-	std::cout << std::to_string(game.score) << std::endl;
+
 	// std::string inf = "SCORE: " + std::to_string(game.score) + " LEVEL: " + std::to_string(game.level);
 	// SDL_Surface *TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
 	// SDL_BlitSurface(TTF_TextSolid, NULL, surface, &info);
@@ -122,33 +121,28 @@ void SDL::execute(Game &game)
         		switch (e.key.keysym.sym)
         		{
         			case SDLK_RIGHT:
-		                std::cout << "right" << std::endl;
 		                ch = 124;
 		                break;
 		            case SDLK_DOWN:
-		                std::cout << "down" << std::endl;
 		                ch = 125;
 		                break;
 		            case SDLK_LEFT:
-		                std::cout << "left" << std::endl;
 		                ch = 123;
 		                break;
 		            case SDLK_UP:
-		                std::cout << "up" << std::endl;
 		                ch = 126;
 		                break;
 		            case SDLK_ESCAPE:
 		            	return ;
                			break;
         		}
-        		std::cout << ch << std::endl;
         	}
             if (e.type == SDL_QUIT)
                 return ;
 	    }
     	if (!game.update(ch))
         	return ;
-        draw(game.getMap(), game);
+        draw(game.getMap());
         usleep(300000 / game.level);
 	}
 }

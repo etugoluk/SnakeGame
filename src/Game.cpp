@@ -46,7 +46,6 @@ Game::printMap() {
 
 bool
 Game::update(char c) {
-    std::cout << "Score = " << score << std::endl;
 
 //  extendTail
     static int flag = 0;
@@ -68,18 +67,20 @@ Game::update(char c) {
     else if (c == 'd' || c == 124)
         snake.moveSnake(RightArrow);
     //else snake.moveHeadByDirection()
+    if (checkCollisions())
+    {
+        return false;
+    }
     snakeBody = snake.getBody();
     if (map[snakeBody.at(0).second][snakeBody.at(0).first] == 'f' && ++score){
         flag = 1;
         if (!(score % 5))
             changeLevel();
-        for(auto v : snakeBody)
+        for (auto v : snakeBody)
             map[v.second][v.first] = 's';
         createFood();
     }
 //  checkCollisions
-    if (checkCollisions())
-        return false;
 //  add snake to map
     for (auto v : snakeBody)
         map[v.second][v.first] = 's';
@@ -96,7 +97,7 @@ bool
 Game::checkCollisions(){
     std::vector<std::pair<int, int>> snakeBody = snake.getBody();
     for(auto v : snakeBody)
-        if (map[v.second][v.first] == 'b' || snake.borderHeadCollision() || snake.headBodyCollision())
+        if (snake.borderHeadCollision() || snake.headBodyCollision() || map[v.second][v.first] == 'b')
             return true;
     return false;
 }
