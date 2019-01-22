@@ -23,7 +23,7 @@ int main(){
     game.printMap();
 
     IGUI   *lib = create(map_size);
-    lib->init(game.getMap());
+    lib->init(game.getMap(), game);
     lib->execute(game);
     lib->destroy();
 
