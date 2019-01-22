@@ -63,7 +63,7 @@ void SDL::destroy()
     SDL_Quit();
 }
 
-// Uint32	get_pixel2(SDL_Surface *sur, const int x, const int y)
+// Uint32	SDL::get_pixel(SDL_Surface *sur, const int x, const int y)
 // {
 // 	uint8_t *v;
 // 	int		bpp;
@@ -87,42 +87,18 @@ void     SDL::set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel)
 	}
 }
 
-// void	scale_image(SDL_Surface *icon, float size)
+
+// void	SDL::scale_image(SDL_Surface *icon)
 // {
-// 	int 		    y;
-//     int             x;
-// 	float 		    new_y;
-//     float           new_x;
-// 	float		    final_x;
-// 	float			final_y;
-// 	float 		    dy;
-//     float           dx;
+//     int scale = blocksize / icon->w;
 
-// 	new_y = 0;
-// 	new_x = 0;
-//     x = -1;
-
-//     final_x = icon->w * scale; 
-// 	dx =  (float)icon->w / final_x;
-//     final_y = icon->h * scale;
-// 	dy = (float)icon->h / final_y;
-
-//     if (scale < 0.0)
+//     for (int i = 0; i < blocksize; ++i)
 //     {
-//         final_x = icon->w; 
-//         final_y = icon->h;
+//     	for (int j = 0; j < blocksize; ++j)
+//     	{
+//     		set_pixel(icon, i, j, get_pixel(icon, i * scale, j * scale));
+//     	}
 //     }
-// 	while (++x < final_x )
-// 	{
-//         new_y = 0;
-// 		y = -1;
-// 		while (++y < final_y)
-// 		{
-// 			set_pixel(bmp, x, y, get_pixel2(icon, (int)new_x , (int)new_y));
-// 			new_y += dy;
-// 		}
-// 		new_x += dx;
-// 	}
 // }
 
 void SDL::draw(Game &game)
@@ -137,9 +113,10 @@ void SDL::draw(Game &game)
 				set_pixel(surface, i * blocksize, j * blocksize, 0xf4ee00);
 			else if (map[j][i] == 'f')
 			{
-			// 	img = {i * blocksize, j * blocksize, blocksize, blocksize};
-			// 	SDL_BlitSurface(food, NULL, surface, &img);
-			// 	SDL_UpdateWindowSurface(window);
+				// scale_image(food);
+				// img = {i * blocksize, j * blocksize, blocksize, blocksize};
+				// SDL_BlitSurface(food, NULL, surface, &img);
+				// SDL_UpdateWindowSurface(window);
 				set_pixel(surface, i * blocksize, j * blocksize, 0xff6600);
 			}
 			else if (map[j][i] == 'b')

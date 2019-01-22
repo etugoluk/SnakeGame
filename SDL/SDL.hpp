@@ -46,4 +46,6 @@ public:
 	void execute(Game &game);
 
 	void set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel);
+	// void scale_image(SDL_Surface *icon);
+	// Uint32	get_pixel(SDL_Surface *sur, const int x, const int y);
 };
