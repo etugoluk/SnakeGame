@@ -21,7 +21,17 @@ class SDL : public IGUI
 	SDL_Color color_text;
 
 	SDL_Rect block;
-	SDL_Rect info;
+
+	//text blocks
+	SDL_Rect label;
+	SDL_Rect level;
+	SDL_Rect score;
+	SDL_Rect change;
+	SDL_Rect gui1;
+	SDL_Rect gui2;
+	SDL_Rect gui3;
+	SDL_Rect usage;
+	SDL_Rect arrow;
 	// SDL_Rect img;
 
 	TTF_Font* font;
@@ -30,9 +40,9 @@ public:
 	SDL(int);
 	~SDL();
 
-	void init(char **map, Game &game);
+	void init(Game &game);
 	void destroy();
-	void draw(char **map, Game &game);
+	void draw(Game &game);
 	void execute(Game &game);
 
 	void set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel);

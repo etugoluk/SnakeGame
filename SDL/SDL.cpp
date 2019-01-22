@@ -13,7 +13,7 @@ SDL::SDL(int screensize) : IGUI(screensize)
 SDL::~SDL()
 {}
 
-void SDL::init(char **map, Game &game)
+void SDL::init(Game &game)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     	std::cout << "SDLDisplay::InitException" << std::endl;
@@ -27,15 +27,31 @@ void SDL::init(char **map, Game &game)
 
 	color_text = {255, 255, 255, 255};
     block = {0, 0, blocksize, blocksize};
-    info = {blocksize * screensize, 0, INFO_SIZE, blocksize * screensize};
+
+    int distance = 40;
+
+    label = {blocksize * screensize + distance, 30, INFO_SIZE, 30};
+    score = {blocksize * screensize + distance, SCREENWIDTH / 2 - 30, INFO_SIZE, 30};
+    level = {blocksize * screensize + distance, SCREENWIDTH / 2, INFO_SIZE, 30};
+
+    change = {blocksize * screensize + distance, SCREENWIDTH / 2 + 60, INFO_SIZE, 30};
+    gui1 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 90, INFO_SIZE, 30};
+    gui2 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 120, INFO_SIZE, 30};
+    gui3 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 150, INFO_SIZE, 30};
+
+    usage = {blocksize * screensize + distance, SCREENWIDTH / 2 + 210, INFO_SIZE, 30};
+    arrow = {blocksize * screensize + distance, SCREENWIDTH / 2 + 240, INFO_SIZE, 60};
 
     // food = SDL_LoadBMP("SDL/images/foods.bmp");
     // if (!food)
     // 	std::cout << SDL_GetError() << std::endl;
+    // food->w = blocksize;
+    // food->h = blocksize;
+    // scale_image(food, blocksize);
     TTF_Init();
     font = TTF_OpenFont("SDL/font/Arial.ttf", 24);
 
-	draw(map, game);
+	draw(game);
 }
 
 void SDL::destroy()
@@ -71,7 +87,7 @@ void     SDL::set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel)
 	}
 }
 
-// void	scale_image(SDL_Surface *bmp, SDL_Surface *icon, float scale)
+// void	scale_image(SDL_Surface *icon, float size)
 // {
 // 	int 		    y;
 //     int             x;
@@ -109,8 +125,10 @@ void     SDL::set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel)
 // 	}
 // }
 
-void SDL::draw(char **map, Game &game)
+void SDL::draw(Game &game)
 {
+	char** map = game.getMap();
+
 	for (int i = 0; i < screensize; ++i)
 	{
 		for (int j = 0; j < screensize; ++j)
@@ -119,9 +137,9 @@ void SDL::draw(char **map, Game &game)
 				set_pixel(surface, i * blocksize, j * blocksize, 0xf4ee00);
 			else if (map[j][i] == 'f')
 			{
-				// img = {i * blocksize, j * blocksize, blocksize, blocksize};
-				// SDL_BlitSurface(food, NULL, surface, &img);
-				// SDL_UpdateWindowSurface(window);
+			// 	img = {i * blocksize, j * blocksize, blocksize, blocksize};
+			// 	SDL_BlitSurface(food, NULL, surface, &img);
+			// 	SDL_UpdateWindowSurface(window);
 				set_pixel(surface, i * blocksize, j * blocksize, 0xff6600);
 			}
 			else if (map[j][i] == 'b')
@@ -133,9 +151,52 @@ void SDL::draw(char **map, Game &game)
 		}
 	}
 
-	std::string inf = "SCORE: " + std::to_string(game.score) + " LEVEL: " + std::to_string(game.level);
-	SDL_Surface *TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
-	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &info);
+	std::string inf;
+	SDL_Surface *TTF_TextSolid;
+
+	inf = "NIBBLER GAME";
+	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &label);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	inf = "Score: " + std::to_string(game.score);
+	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &score);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	inf = "Level: " + std::to_string(game.level);
+	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &level);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	inf = "To change GUI press:";
+	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &change);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	inf = "1 - classic";
+	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui1);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	inf = "2 - unit (now)";
+	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui2);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	inf = "3 - minimal";
+	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui3);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	inf = "Usage:";
+	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &usage);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	inf = "Use arrow keys to move the snake. Avoid barriers and borders.";
+	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &arrow);
 	SDL_FreeSurface(TTF_TextSolid);
 
 	SDL_UpdateWindowSurface(window);
@@ -192,7 +253,7 @@ void SDL::execute(Game &game)
 	    }
     	if (!game.update(ch))
         	return ;
-        draw(game.getMap(), game);
+        draw(game);
         usleep(300000 / game.level);
 	}
 }

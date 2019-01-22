@@ -10,9 +10,9 @@ protected:
 public:
 	IGUI(int screensize) : screensize(screensize){}
 
-	virtual void init(char **map, Game &game) = 0;
+	virtual void init(Game &game) = 0;
 	virtual void destroy() = 0;
-	virtual void draw(char **map, Game &game) = 0;
+	virtual void draw(Game &game) = 0;
 	virtual void execute(Game &game) = 0;
 };
 

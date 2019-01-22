@@ -20,10 +20,10 @@ int main(){
     int map_size = 30;
     Game game(map_size);
     game.update(' ');
-    game.printMap();
+    // game.printMap();
 
     IGUI   *lib = create(map_size);
-    lib->init(game.getMap(), game);
+    lib->init(game);
     lib->execute(game);
     lib->destroy();
 
