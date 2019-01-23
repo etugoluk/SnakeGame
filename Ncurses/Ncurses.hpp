@@ -18,6 +18,7 @@ public:
 	void execute(Game &game);
 
 	void draw_block(int i, int j);
+	void draw_info(Game &game);
 };
 
 #endif
