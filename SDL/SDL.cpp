@@ -30,9 +30,9 @@ void SDL::init(Game &game)
 
     int distance = 40;
 
-    label = {blocksize * screensize + distance, 30, INFO_SIZE, 30};
-    score = {blocksize * screensize + distance, SCREENWIDTH / 2 - 30, INFO_SIZE, 30};
-    level = {blocksize * screensize + distance, SCREENWIDTH / 2, INFO_SIZE, 30};
+    label = {blocksize * screensize + 60, 30, INFO_SIZE, 30};
+    score = {blocksize * screensize + distance + 90, SCREENWIDTH / 2 - 100, INFO_SIZE, 30};
+    level = {blocksize * screensize + distance + 90, SCREENWIDTH / 2 - 70, INFO_SIZE, 30};
 
     change = {blocksize * screensize + distance, SCREENWIDTH / 2 + 60, INFO_SIZE, 30};
     gui1 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 90, INFO_SIZE, 30};
@@ -42,16 +42,22 @@ void SDL::init(Game &game)
     usage = {blocksize * screensize + distance, SCREENWIDTH / 2 + 210, INFO_SIZE, 30};
     arrow = {blocksize * screensize + distance, SCREENWIDTH / 2 + 240, INFO_SIZE, 60};
 
-    // food = SDL_LoadBMP("SDL/images/foods.bmp");
-    // if (!food)
-    // 	std::cout << SDL_GetError() << std::endl;
-    // food->w = blocksize;
-    // food->h = blocksize;
-    // scale_image(food, blocksize);
-    TTF_Init();
-    font = TTF_OpenFont("SDL/font/Arial.ttf", 24);
+    // for (int i = SCREENWIDTH; i < SCREENWIDTH + INFO_SIZE; ++i)
+    // {
+    // 	for (int j = 0; j < SCREENWIDTH; ++j)
+    // 	{
+    // 		set_pixel(surface, i, j, 0x00CCCC);
+    // 	}
+    // }
+    // info_block = SDL_CreateRGBSurface(0, INFO_SIZE, SCREENWIDTH, 32, 0, 119, 142, 255);
+    // SDL_Rect r = {SCREENWIDTH, 0, INFO_SIZE, INFO_SIZE};
+    // SDL_BlitSurface(info_block, NULL, surface, &r);
+    // SDL_FreeSurface(info_block);
 
-	draw(game);
+    TTF_Init();
+    font = TTF_OpenFont("SDL/font/Arial.ttf", 20);
+
+	draw(game, 0xf4ee00);
 }
 
 void SDL::destroy()
@@ -63,19 +69,14 @@ void SDL::destroy()
     SDL_Quit();
 }
 
-// Uint32	SDL::get_pixel(SDL_Surface *sur, const int x, const int y)
+// void     SDL::set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 // {
-// 	uint8_t *v;
-// 	int		bpp;
-
-// 	if (x < 0 || x >= sur->w || y < 0 || y >= sur->h)
-// 		return (0);
-// 	bpp = sur->format->BytesPerPixel;
-// 	v = (uint8_t *)sur->pixels + y * sur->pitch + x * bpp;
-// 	return (v[0] | v[1] << 8 | v[2] << 16);
+// 	Uint8 *target_pixel = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
+// 	*(Uint32 *)target_pixel = pixel;
 // }
+	
 
-void     SDL::set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel)
+void     SDL::set_block(SDL_Surface *surface, int i, int j, Uint32 pixel)
 {
 	for (int x = i; x < i + blocksize; ++x)
 	{
@@ -87,21 +88,7 @@ void     SDL::set_pixel(SDL_Surface *surface, int i, int j, Uint32 pixel)
 	}
 }
 
-
-// void	SDL::scale_image(SDL_Surface *icon)
-// {
-//     int scale = blocksize / icon->w;
-
-//     for (int i = 0; i < blocksize; ++i)
-//     {
-//     	for (int j = 0; j < blocksize; ++j)
-//     	{
-//     		set_pixel(icon, i, j, get_pixel(icon, i * scale, j * scale));
-//     	}
-//     }
-// }
-
-void SDL::draw(Game &game)
+void SDL::draw(Game &game, int color)
 {
 	char** map = game.getMap();
 
@@ -110,29 +97,20 @@ void SDL::draw(Game &game)
 		for (int j = 0; j < screensize; ++j)
 		{
 			if (map[j][i] == 's')
-				set_pixel(surface, i * blocksize, j * blocksize, 0xf4ee00);
+				set_block(surface, i * blocksize, j * blocksize, 0xf4ee00);
 			else if (map[j][i] == 'f')
-			{
-				// scale_image(food);
-				// img = {i * blocksize, j * blocksize, blocksize, blocksize};
-				// SDL_BlitSurface(food, NULL, surface, &img);
-				// SDL_UpdateWindowSurface(window);
-				set_pixel(surface, i * blocksize, j * blocksize, 0xff6600);
-			}
+				set_block(surface, i * blocksize, j * blocksize, 0xff6600);
 			else if (map[j][i] == 'b')
-				set_pixel(surface, i * blocksize, j * blocksize, 0xe69900);
-			else if (map[j][i] == '.' && ((!(j % 2) && !(i % 2)) || ((j % 2) && (i % 2))))
-				set_pixel(surface, i * blocksize, j * blocksize, 0xb5dc00);
+				set_block(surface, i * blocksize, j * blocksize, 0x00CCCC);
 			else
-				set_pixel(surface, i * blocksize, j * blocksize, 0xaadc00);
+				set_block(surface, i * blocksize, j * blocksize, color);
 		}
 	}
 
 	std::string inf;
-	SDL_Surface *TTF_TextSolid;
+	SDL_Surface* TTF_TextSolid;
 
-	inf = "NIBBLER GAME";
-	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	TTF_TextSolid = TTF_RenderText_Solid(font, "NIBBLER GAME", color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &label);
 	SDL_FreeSurface(TTF_TextSolid);
 
@@ -146,33 +124,27 @@ void SDL::draw(Game &game)
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &level);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	inf = "To change GUI press:";
-	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	TTF_TextSolid = TTF_RenderText_Solid(font, "To change GUI press:", color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &change);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	inf = "1 - classic";
-	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	TTF_TextSolid = TTF_RenderText_Solid(font, "1 - classic", color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui1);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	inf = "2 - unit (now)";
-	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	TTF_TextSolid = TTF_RenderText_Solid(font, "2 - unit (now)", color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui2);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	inf = "3 - minimal";
-	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	TTF_TextSolid = TTF_RenderText_Solid(font, "3 - minimal", color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui3);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	inf = "Usage:";
-	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	TTF_TextSolid = TTF_RenderText_Solid(font, "Usage:", color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &usage);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	inf = "Use arrow keys to move the snake. Avoid barriers and borders.";
-	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
+	TTF_TextSolid = TTF_RenderText_Solid(font, "Use arrow keys to move the snake. Avoid barriers and borders.", color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &arrow);
 	SDL_FreeSurface(TTF_TextSolid);
 
@@ -184,8 +156,16 @@ void SDL::execute(Game &game)
 {
 	char ch = 0;
 
+	int r = 246;
+	int g = 255;
+	int b = 246;
+	int k = 1;
+
+	int *n = &b;
+	int counter;
 	while (1)
 	{
+		counter = r * 256 * 256 + g * 256 + b;
 		SDL_Event e;
 		switch (game.snake.getHeadDirection())
     	{
@@ -230,7 +210,18 @@ void SDL::execute(Game &game)
 	    }
     	if (!game.update(ch))
         	return ;
-        draw(game);
+        draw(game, counter);
         usleep(300000 / game.level);
+        *n += k;
+        if (*n == 255 || *n == 246)
+        {
+        	k *= -1;
+        	if (n == &b)
+        		n = &g;
+        	else if (n == &r)
+        		n = &b;
+        	else
+        		n = &r;
+        }
 	}
 }

@@ -30,7 +30,7 @@ Game::fillMap() {
             map[i][j] = '.';
         }
     }
-    std::vector<std::pair<int, int>> snakeBody = snake.getBody();
+    std::vector<std::pair<int, int> > snakeBody = snake.getBody();
     for(auto v : snakeBody)
         map[v.second][v.first] = 's';
 }
@@ -54,7 +54,7 @@ Game::update(char c) {
         flag = 0;
     }
 //  refill snake by '.'
-    std::vector<std::pair<int, int>> snakeBody = snake.getBody();
+    std::vector<std::pair<int, int> > snakeBody = snake.getBody();
     for (auto v : snakeBody)
         map[v.second][v.first] = '.';
 //  move snake
@@ -95,7 +95,7 @@ Game::changeLevel() {
 
 bool
 Game::checkCollisions(){
-    std::vector<std::pair<int, int>> snakeBody = snake.getBody();
+    std::vector<std::pair<int, int> > snakeBody = snake.getBody();
     for(auto v : snakeBody)
         if (snake.borderHeadCollision() || snake.headBodyCollision() || map[v.second][v.first] == 'b')
             return true;
