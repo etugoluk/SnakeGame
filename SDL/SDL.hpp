@@ -27,8 +27,6 @@ class SDL : public IGUI
 	SDL_Rect gui1;
 	SDL_Rect gui2;
 	SDL_Rect gui3;
-	SDL_Rect usage;
-	SDL_Rect arrow;
 
 	TTF_Font* font;
 

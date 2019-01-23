@@ -24,32 +24,17 @@ SDL::SDL(Game &game) : IGUI(game)
 
     int distance = 40;
 
-    label = {blocksize * screensize + 60, 30, INFO_SIZE, 30};
-    score = {blocksize * screensize + distance + 90, SCREENWIDTH / 2 - 100, INFO_SIZE, 30};
-    level = {blocksize * screensize + distance + 90, SCREENWIDTH / 2 - 70, INFO_SIZE, 30};
+    label = {blocksize * screensize + 50, 30, INFO_SIZE, 30};
+    score = {blocksize * screensize + distance + 70, SCREENWIDTH / 2 - 100, INFO_SIZE, 40};
+    level = {blocksize * screensize + distance + 70, SCREENWIDTH / 2 - 70, INFO_SIZE, 40};
 
-    change = {blocksize * screensize + distance, SCREENWIDTH / 2 + 60, INFO_SIZE, 30};
-    gui1 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 90, INFO_SIZE, 30};
-    gui2 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 120, INFO_SIZE, 30};
-    gui3 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 150, INFO_SIZE, 30};
-
-    usage = {blocksize * screensize + distance, SCREENWIDTH / 2 + 210, INFO_SIZE, 30};
-    arrow = {blocksize * screensize + distance, SCREENWIDTH / 2 + 240, INFO_SIZE, 60};
-
-    // for (int i = SCREENWIDTH; i < SCREENWIDTH + INFO_SIZE; ++i)
-    // {
-    // 	for (int j = 0; j < SCREENWIDTH; ++j)
-    // 	{
-    // 		set_pixel(surface, i, j, 0x00CCCC);
-    // 	}
-    // }
-    // info_block = SDL_CreateRGBSurface(0, INFO_SIZE, SCREENWIDTH, 32, 0, 119, 142, 255);
-    // SDL_Rect r = {SCREENWIDTH, 0, INFO_SIZE, INFO_SIZE};
-    // SDL_BlitSurface(info_block, NULL, surface, &r);
-    // SDL_FreeSurface(info_block);
+    change = {blocksize * screensize + distance, SCREENWIDTH / 2 + 120, INFO_SIZE, 30};
+    gui1 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 150, INFO_SIZE, 30};
+    gui2 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 180, INFO_SIZE, 30};
+    gui3 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 210, INFO_SIZE, 30};
 
     TTF_Init();
-    font = TTF_OpenFont("SDL/font/Arial.ttf", 20);
+    font = TTF_OpenFont("SDL/font/BigCaslon.ttf", 26);
 
 	draw(game, 0xf4ee00);
 }
@@ -104,6 +89,9 @@ void SDL::draw(Game &game, int color)
 	std::string inf;
 	SDL_Surface* TTF_TextSolid;
 
+	SDL_Rect rect = {blocksize * screensize, 0, INFO_SIZE, SCREENWIDTH};
+	SDL_FillRect(surface, &rect, 0x009999);
+
 	TTF_TextSolid = TTF_RenderText_Solid(font, "NIBBLER GAME", color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &label);
 	SDL_FreeSurface(TTF_TextSolid);
@@ -132,14 +120,6 @@ void SDL::draw(Game &game, int color)
 
 	TTF_TextSolid = TTF_RenderText_Solid(font, "3 - minimal", color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui3);
-	SDL_FreeSurface(TTF_TextSolid);
-
-	TTF_TextSolid = TTF_RenderText_Solid(font, "Usage:", color_text);
-	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &usage);
-	SDL_FreeSurface(TTF_TextSolid);
-
-	TTF_TextSolid = TTF_RenderText_Solid(font, "Use arrow keys to move the snake. Avoid barriers and borders.", color_text);
-	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &arrow);
 	SDL_FreeSurface(TTF_TextSolid);
 
 	SDL_UpdateWindowSurface(window);
