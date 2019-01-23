@@ -11,7 +11,7 @@ class IGUI
 protected:
 	int screensize;
 public:
-	IGUI(Game &game) : screensize(game.screenLength) {}
+	IGUI(Game &game) : screensize(game.getScreenLength()) {}
 
 	virtual ~IGUI(){}
 	// virtual void init(Game &game) = 0;

@@ -149,6 +149,22 @@ Game::createFood()
 }
 
 char**
-Game::getMap() {
+Game::getMap()
+{
     return map;
+}
+
+int Game::getLevel()
+{
+    return level;
+}
+
+int Game::getScore()
+{
+    return score;
+}
+
+int Game::getScreenLength()
+{
+    return screenLength;
 }

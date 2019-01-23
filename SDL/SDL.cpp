@@ -108,12 +108,12 @@ void SDL::draw(Game &game, int color)
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &label);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	inf = "Score: " + std::to_string(game.score);
+	inf = "Score: " + std::to_string(game.getScore());
 	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &score);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	inf = "Level: " + std::to_string(game.level);
+	inf = "Level: " + std::to_string(game.getLevel());
 	TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text);
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &level);
 	SDL_FreeSurface(TTF_TextSolid);
@@ -208,7 +208,7 @@ int SDL::execute(Game &game)
     	if (!game.update(ch))
         	return 0;
         draw(game, counter);
-        usleep(300000 / game.level);
+        usleep(300000 / game.getLevel());
         *n += k;
         if (*n == 255 || *n == 246)
         {

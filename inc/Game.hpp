@@ -26,12 +26,17 @@ public:
     char **getMap();
 
     Snake snake;
-    int level;
-    int score;
-    long screenLength;
+
+    int getLevel();
+    int getScore();
+    int getScreenLength();
+
 private:
     Game();
     char **map;
+    int level;
+    int score;
+    long screenLength;
 };
 
 #endif //NIBBLER_GAME_HPP

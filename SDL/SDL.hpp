@@ -37,7 +37,7 @@ public:
 	~SDL();
 
 	void draw(Game &game, int color);
-	void draw(Game &game) {std::cout << game.level << std::endl;}
+	void draw(Game &game) {std::cout << game.getLevel() << std::endl;}
 	int execute(Game &game);
 
 	// void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);

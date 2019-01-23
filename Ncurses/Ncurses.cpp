@@ -89,8 +89,8 @@ void NCURSES::draw_info(Game &game)
 {
 	refresh();
 
-	std::string score = "SCORE: " + std::to_string(game.score);
-	std::string level = "LEVEL: " + std::to_string(game.level);
+	std::string score = "SCORE: " + std::to_string(game.getScore());
+	std::string level = "LEVEL: " + std::to_string(game.getLevel());
 	mvprintw(10, screensize * blocksize * 2 + 5, "NIBBLER GAME");
 	mvprintw(12, screensize * blocksize * 2 + 5, score.c_str());
 	mvprintw(14, screensize * blocksize * 2 + 5, level.c_str());
