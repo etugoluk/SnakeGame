@@ -1,4 +1,10 @@
 #include "Ncurses.hpp"
+#include <unistd.h>
+
+#define GRASS		1
+#define SNAKE		2
+#define FOOD		3
+#define BARRIER		4
 
 NCURSES::NCURSES(int screensize) : IGUI(screensize)
 {}
@@ -6,57 +12,128 @@ NCURSES::NCURSES(int screensize) : IGUI(screensize)
 NCURSES::~NCURSES()
 {}
 
-// void v::init(Game &game)
-// {
-// 	std::string name =  "Nibbler";
-// 	mlx = mlx_init();
-// 	mlx_win = mlx_new_window(mlx, SCREENWIDTH + INFO_SIZE, SCREENWIDTH, (char*)name.c_str());
-// 	mlx_img = mlx_new_image(mlx, SCREENWIDTH + INFO_SIZE, SCREENWIDTH);
+void NCURSES::init(Game &game)
+{
+	initscr();
+	start_color();
+	curs_set(0);
+	cbreak();
+	noecho();
 
-// 	blocksize = SCREENWIDTH / screensize;
+	init_pair(GRASS, COLOR_GREEN, COLOR_GREEN);
+	init_pair(SNAKE, COLOR_YELLOW, COLOR_YELLOW);
+	init_pair(FOOD, COLOR_RED, COLOR_RED);
+	init_pair(BARRIER, COLOR_BLUE, COLOR_BLUE);
 
-// 	draw(game);
-// }
+	blocksize = 2;
 
-// void MLX::destroy()
-// {
+	draw(game);
 
-// }
+}
 
-// void NCURSES::draw(Game &game)
-// {
-// 	char** map = game.getMap();
+void NCURSES::draw_block(int i, int j)
+{
+	for (int k = i * blocksize * 2; k < (i + 1) * blocksize * 2; ++k)
+	{
+		for (int l = j * blocksize; l < (j + 1) * blocksize; ++l)
+		{
+			mvaddch(l, k, ' ');
+		}
+	}
+}
 
-// 	for (int i = 0; i < screensize; ++i)
-// 	{
-// 		for (int j = 0; j < screensize; ++j)
-// 		{
-// 			if (map[j][i] == 's')
-// 				draw_block(i * blocksize, j * blocksize, 0xf4ee00);
-// 			else if (map[j][i] == 'f')
-// 				draw_block(i * blocksize, j * blocksize, 0xff6600);
-// 			else if (map[j][i] == 'b')
-// 				draw_block(i * blocksize, j * blocksize, 0xe69900);
-// 			else if (map[j][i] == '.' && ((!(j % 2) && !(i % 2)) || ((j % 2) && (i % 2))))
-// 				draw_block(i * blocksize, j * blocksize, 0xb5dc00);
-// 			else
-// 				draw_block(i * blocksize, j * blocksize, 0xaadc00);
-// 		}
-// 	}
-// }
+void NCURSES::draw(Game &game)
+{
+	char **map = game.getMap();
 
-// void NCURSES::draw_block(int i, int j, int color)
-// {
-// 	for (int x = i; x < i + blocksize; ++x)
-// 	{
-// 		for (int y = j; y < j + blocksize; ++y)
-// 		{
-// 			mlx_pixel_put_image(x, y, color);
-// 		}
-// 	}
-// }
+	for (int i = 0; i < screensize; ++i)
+	{
+		for (int j = 0; j < screensize; ++j)
+		{
+			if (map[j][i] == 's')
+			{
+				attron(COLOR_PAIR(SNAKE));
+				draw_block(i, j);
+				attroff(COLOR_PAIR(SNAKE));
+			}
+			else if (map[j][i] == 'f')
+			{
+				attron(COLOR_PAIR(FOOD));
+				draw_block(i, j);
+				attroff(COLOR_PAIR(FOOD));
+			}
+			else if (map[j][i] == 'b')
+			{
+				attron(COLOR_PAIR(BARRIER));
+				draw_block(i, j);
+				attroff(COLOR_PAIR(BARRIER));
+			}
+			else
+			{
+				attron(COLOR_PAIR(GRASS));
+				draw_block(i, j);
+				attroff(COLOR_PAIR(GRASS));
+			}
+		}
+		printw("\n");
+	}
 
-// void MLX::execute(Game &game)
-// {
-// 	mlx_loop(mlx);
-// }
+	refresh();
+    getch();
+}
+
+void NCURSES::execute(Game &game)
+{
+	int ch = 0;
+	keypad(stdscr, true);
+	// nodelay(stdscr, TRUE);
+
+	while (ch != 'q' && ch != KEY_EXIT)
+	{
+		// if ((ch = getch()) == ERR)
+		// {
+		// 	switch (game.snake.getHeadDirection())
+		// 	{
+	 //    		case Top:
+	 //        		ch = 126;
+	 //        		break;
+	 //        	case Bottom:
+	 //        		ch = 125;
+	 //        		break;
+	 //        	case Left:
+	 //        		ch = 123;
+	 //        		break;
+	 //        	case Right:
+	 //        		ch = 124;
+	 //        		break;
+		// 	 }
+		// 	 break;
+  // //       }
+		ch = getch();
+		switch (ch)
+		{
+			case KEY_RIGHT:
+				ch = 124;
+				break;
+			case KEY_LEFT:
+				ch = 123;
+				break;
+			case KEY_UP:
+				ch = 126;
+				break;
+			case KEY_DOWN:
+				ch = 125;
+				break;
+		}
+		if (!game.update(ch))
+			return ;
+		draw(game);
+		// usleep(300000);
+	}
+}
+
+void NCURSES::destroy()
+{
+	endwin();
+}
+
