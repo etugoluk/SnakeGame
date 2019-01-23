@@ -1,10 +1,5 @@
 #include "Ncurses.hpp"
 
-extern "C" IGUI* newGUI(int screensize)
-{
-	return new NCURSES(screensize);
-}
-
 int main()
 {
 	int map_size = 30;

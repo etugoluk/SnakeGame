@@ -6,6 +6,11 @@
 #define FOOD		3
 #define BARRIER		4
 
+extern "C" IGUI* newGUI(int screensize)
+{
+	return new NCURSES(screensize);
+}
+
 NCURSES::NCURSES(int screensize) : IGUI(screensize)
 {}
 
