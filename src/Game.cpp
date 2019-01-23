@@ -145,7 +145,6 @@ Game::createFood()
     }
     while (map[x][y] != '.');
 
-    std::cout << "FOOD:" << x << " " << y << std::endl;
     map[x][y] = 'f';
 }
 

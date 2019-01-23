@@ -14,7 +14,6 @@ class SDL : public IGUI
 
 	SDL_Window *window;
 	SDL_Surface *surface;
-	SDL_Surface *food;
 	// SDL_Surface *info_block;
 	SDL_Color color_text;
 
@@ -34,13 +33,12 @@ class SDL : public IGUI
 	TTF_Font* font;
 
 public:
-	SDL(int);
+	SDL(Game &game);
 	~SDL();
 
-	void init(Game &game);
-	void destroy();
 	void draw(Game &game, int color);
-	void execute(Game &game);
+	void draw(Game &game) {std::cout << game.level << std::endl;}
+	int execute(Game &game);
 
 	// void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 	void set_block(SDL_Surface *surface, int i, int j, Uint32 pixel);

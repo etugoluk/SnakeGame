@@ -28,11 +28,10 @@ public:
     Snake snake;
     int level;
     int score;
+    long screenLength;
 private:
     Game();
-    long screenLength;
     char **map;
-
 };
 
 #endif //NIBBLER_GAME_HPP

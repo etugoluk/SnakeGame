@@ -6,18 +6,12 @@
 #define FOOD		3
 #define BARRIER		4
 
-extern "C" IGUI* newGUI(int screensize)
+extern "C" IGUI* newGUI(Game &game)
 {
-	return new NCURSES(screensize);
+	return new NCURSES(game);
 }
 
-NCURSES::NCURSES(int screensize) : IGUI(screensize)
-{}
-
-NCURSES::~NCURSES()
-{}
-
-void NCURSES::init(Game &game)
+NCURSES::NCURSES(Game &game) : IGUI(game)
 {
 	initscr();
 	start_color();
@@ -33,7 +27,11 @@ void NCURSES::init(Game &game)
 	blocksize = 2;
 
 	draw(game);
+}
 
+NCURSES::~NCURSES()
+{
+	endwin();
 }
 
 void NCURSES::draw_block(int i, int j)
@@ -98,7 +96,7 @@ void NCURSES::draw_info(Game &game)
 	mvprintw(14, screensize * blocksize * 2 + 5, level.c_str());
 }
 
-void NCURSES::execute(Game &game)
+int NCURSES::execute(Game &game)
 {
 	int ch = 0;
 	keypad(stdscr, true);
@@ -140,17 +138,15 @@ void NCURSES::execute(Game &game)
 			case KEY_DOWN:
 				ch = 125;
 				break;
+			case '2':
+				return 2;
+				break;
 		}
 		if (!game.update(ch))
-			return ;
+			return 0;
 		draw(game);
 		draw_info(game);
 		// usleep(300000);
 	}
+	return 0;
 }
-
-void NCURSES::destroy()
-{
-	endwin();
-}
-

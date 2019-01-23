@@ -1,7 +1,7 @@
 #ifndef IGUI_HPP
 # define IGUI_HPP
 
-#include "../inc/Game.hpp"
+#include "Game.hpp"
 
 #define SCREENWIDTH 900
 #define INFO_SIZE 300
@@ -11,12 +11,13 @@ class IGUI
 protected:
 	int screensize;
 public:
-	IGUI(int screensize) : screensize(screensize){}
+	IGUI(Game &game) : screensize(game.screenLength) {}
 
-	virtual void init(Game &game) = 0;
-	virtual void destroy() = 0;
-	// virtual void draw(Game &game) = 0;
-	virtual void execute(Game &game) = 0;
+	virtual ~IGUI(){}
+	// virtual void init(Game &game) = 0;
+	// virtual void destroy() = 0;
+	virtual void draw(Game &game) = 0;
+	virtual int execute(Game &game) = 0;
 };
 
 #endif

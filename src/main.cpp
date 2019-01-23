@@ -3,29 +3,53 @@
 #include "../inc/IGUI.hpp"
 #include <dlfcn.h>
 
-int main(){
+IGUI*   chooseLib(int res, int map_size)
+{
+    IGUI   *(*create)(Game) = nullptr;
+    void *handle;
 
-	void *handle;
-
-	handle = dlopen("SDL/sdl_lib.so", RTLD_LAZY);
-     if (!handle) {
+    if (res == 1)
+    {
+        handle = dlopen("Ncurses/ncurses_lib.so", RTLD_LAZY);
+    }
+    if (res == 2)
+    {
+        handle = dlopen("SDL/sdl_lib.so", RTLD_LAZY);
+    }
+    if (!handle) {
         fprintf(stderr, "%s\n", dlerror());
         exit(EXIT_FAILURE);
     }
 
-    IGUI   *(*create)(int) = nullptr;
-    if (( create = reinterpret_cast<IGUI* (*)(int)>(dlsym(handle, "newGUI")) ) == nullptr)
+    if (( create = reinterpret_cast<IGUI* (*)(Game)>(dlsym(handle, "newGUI")) ) == nullptr)
         std::cerr << "open_lib: dlsym : " << dlerror() << std::endl;
 
+    return create(map_size);
+}
+
+int main()
+{
     int map_size = 30;
     Game game(map_size);
     game.update(' ');
-    // game.printMap();
 
-    IGUI   *lib = create(map_size);
-    lib->init(game);
-    lib->execute(game);
-    lib->destroy();
+    IGUI   *lib = chooseLib(2, map_size);
+
+    int res = 0;
+    while (1)
+    {
+        res = lib->execute(game);
+        if (!res)
+        {
+            delete lib;
+            exit(0);
+        }
+        if (res > 0)
+        {
+            delete lib;
+            lib = chooseLib(res, map_size);
+        }
+    }
 
     return (0);
 }

@@ -2,18 +2,12 @@
 
 #include <unistd.h>
 
-extern "C" IGUI* newGUI(int screensize)
+extern "C" IGUI* newGUI(Game &game)
 {
-	return new SDL(screensize);
+	return new SDL(game);
 }
 
-SDL::SDL(int screensize) : IGUI(screensize)
-{}
-
-SDL::~SDL()
-{}
-
-void SDL::init(Game &game)
+SDL::SDL(Game &game) : IGUI(game)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     	std::cout << "SDLDisplay::InitException" << std::endl;
@@ -60,14 +54,14 @@ void SDL::init(Game &game)
 	draw(game, 0xf4ee00);
 }
 
-void SDL::destroy()
+SDL::~SDL()
 {
 	TTF_CloseFont(font);
 	SDL_FreeSurface(surface);
-	SDL_FreeSurface(food);
 	SDL_DestroyWindow(window);
     SDL_Quit();
 }
+
 
 // void     SDL::set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 // {
@@ -152,7 +146,7 @@ void SDL::draw(Game &game, int color)
 	SDL_memset(surface->pixels, 0, surface->h * surface->pitch);
 }
 
-void SDL::execute(Game &game)
+int SDL::execute(Game &game)
 {
 	char ch = 0;
 
@@ -201,15 +195,18 @@ void SDL::execute(Game &game)
 		                ch = 126;
 		                break;
 		            case SDLK_ESCAPE:
-		            	return ;
+		            	return 0;
+               			break;
+               		case SDLK_1:
+		            	return 1;
                			break;
         		}
         	}
             if (e.type == SDL_QUIT)
-                return ;
+                return 0;
 	    }
     	if (!game.update(ch))
-        	return ;
+        	return 0;
         draw(game, counter);
         usleep(300000 / game.level);
         *n += k;
@@ -224,4 +221,5 @@ void SDL::execute(Game &game)
         		n = &r;
         }
 	}
+	return 0;
 }
