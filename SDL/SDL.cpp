@@ -40,7 +40,7 @@ SDL::SDL(Game &game) : IGUI(game)
     if (!(font = TTF_OpenFont("SDL/font/BigCaslon.ttf", 26)))
     	throw SDL::FontException();
 
-    background_color = 0xf4ee00;
+    background_color = 0xF6FFF6;
 	draw(game);
 }
 
@@ -138,19 +138,34 @@ void SDL::draw(Game &game)
 	SDL_memset(surface->pixels, 0, surface->h * surface->pitch);
 }
 
+void SDL::getColor()
+{
+	static int r = 246;
+	static int g = 255;
+	static int b = 246;
+	static int k = 1;
+	static int *n = &b;
+
+	*n += k;
+    if (*n == 255 || *n == 246)
+    {
+    	k *= -1;
+    	if (n == &b)
+    		n = &g;
+    	else if (n == &r)
+    		n = &b;
+    	else
+    		n = &r;
+    }
+    background_color = r * 256 * 256 + g * 256 + b;
+}
+
 int SDL::execute(Game &game)
 {
 	char ch = 0;
 
-	int r = 246;
-	int g = 255;
-	int b = 246;
-	int k = 1;
-	int *n = &b;
-
 	while (1)
 	{
-		background_color = r * 256 * 256 + g * 256 + b;
 		SDL_Event e;
 		switch (game.snake.getHeadDirection())
     	{
@@ -171,27 +186,18 @@ int SDL::execute(Game &game)
 	    {
         	if (e.type == SDL_KEYDOWN)
         	{
-        		switch (e.key.keysym.sym)
-        		{
-        			case SDLK_RIGHT:
-		                ch = 124;
-		                break;
-		            case SDLK_DOWN:
-		                ch = 125;
-		                break;
-		            case SDLK_LEFT:
-		                ch = 123;
-		                break;
-		            case SDLK_UP:
-		                ch = 126;
-		                break;
-		            case SDLK_ESCAPE:
-		            	return 0;
-               			break;
-               		case SDLK_1:
-		            	return 1;
-               			break;
-        		}
+        		if (e.key.keysym.sym == SDLK_RIGHT && ch != 123)
+        			ch = 124;
+        		else if (e.key.keysym.sym == SDLK_DOWN && ch != 126)
+        			ch = 125;
+        		else if (e.key.keysym.sym == SDLK_LEFT && ch != 124)
+        			ch = 123;
+        		else if (e.key.keysym.sym == SDLK_UP && ch != 125)
+        			ch = 126;
+        		else if (e.key.keysym.sym == SDLK_ESCAPE)
+        			return 0;
+        		else if (e.key.keysym.sym == SDLK_1)
+        			return 1;
         	}
             if (e.type == SDL_QUIT)
                 return 0;
@@ -200,18 +206,9 @@ int SDL::execute(Game &game)
         	return 0;
         draw(game);
         usleep(300000 / game.getLevel());
-        *n += k;
-        if (*n == 255 || *n == 246)
-        {
-        	k *= -1;
-        	if (n == &b)
-        		n = &g;
-        	else if (n == &r)
-        		n = &b;
-        	else
-        		n = &r;
-        }
+        getColor();
 	}
+
 	return 0;
 }
 
