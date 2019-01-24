@@ -177,17 +177,17 @@ void SDL::draw(Game &game)
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &change);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "1 - classic", color_text)))
+	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "1 - Ncurses", color_text)))
 		throw SDL::SurfaceException();
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui1);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "2 - unit (now)", color_text)))
+	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "2 - SDL(now)", color_text)))
 		throw SDL::SurfaceException();
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui2);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "3 - minimal", color_text)))
+	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "3 - SFML", color_text)))
 		throw SDL::SurfaceException();
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &gui3);
 	SDL_FreeSurface(TTF_TextSolid);

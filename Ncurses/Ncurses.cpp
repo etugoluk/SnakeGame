@@ -5,6 +5,7 @@
 #define SNAKE		2
 #define FOOD		3
 #define BARRIER		4
+#define TEXT		5
 
 extern "C" IGUI* newGUI(Game &game)
 {
@@ -23,6 +24,7 @@ NCURSES::NCURSES(Game &game) : IGUI(game)
 	init_pair(SNAKE, COLOR_YELLOW, COLOR_YELLOW);
 	init_pair(FOOD, COLOR_RED, COLOR_RED);
 	init_pair(BARRIER, COLOR_BLUE, COLOR_BLUE);
+	init_pair(TEXT, COLOR_GREEN, COLOR_BLACK);
 
 	blocksize = 1;
 
@@ -41,11 +43,24 @@ int NCURSES::drawBeginWindow()
 	keypad(stdscr, true);
 	nodelay(stdscr, FALSE);
 
-	mvprintw(0, 0, "PLAY (press Enter key)");
-	mvprintw(2, 0, "EXIT (press Esc key)");
+	attron(COLOR_PAIR(TEXT));
+	mvprintw(0, 0, " ███▄    █  ██▓ ▄▄▄▄    ▄▄▄▄    ██▓    ▓█████  ██▀███  "); 
+	mvprintw(1, 0, " ██ ▀█   █ ▓██▒▓█████▄ ▓█████▄ ▓██▒    ▓█   ▀ ▓██ ▒ ██▒");
+	mvprintw(2, 0, "▓██  ▀█ ██▒▒██▒▒██▒ ▄██▒██▒ ▄██▒██░    ▒███   ▓██ ░▄█ ▒");
+	mvprintw(3, 0, "▓██▒  ▐▌██▒░██░▒██░█▀  ▒██░█▀  ▒██░    ▒▓█  ▄ ▒██▀▀█▄  ");
+	mvprintw(4, 0, "▒██░   ▓██░░██░░▓█  ▀█▓░▓█  ▀█▓░██████▒░▒████▒░██▓ ▒██▒");
+	mvprintw(5, 0, "░ ▒░   ▒ ▒ ░▓  ░▒▓███▀▒░▒▓███▀▒░ ▒░▓  ░░░ ▒░ ░░ ▒▓ ░▒▓░");
+	mvprintw(6, 0, "░ ░░   ░ ▒░ ▒ ░▒░▒   ░ ▒░▒   ░ ░ ░ ▒  ░ ░ ░  ░  ░▒ ░ ▒░");
+	mvprintw(7, 0, "   ░   ░ ░  ▒ ░ ░    ░  ░    ░   ░ ░      ░     ░░   ░ ");
+	mvprintw(8, 0, "         ░  ░   ░       ░          ░  ░   ░  ░   ░     ");
+	mvprintw(9, 0, "                     ░       ░                         ");
+
+	mvprintw(11, 16, "PLAY (press Enter key)");
+	mvprintw(13, 16, "EXIT (press Esc key)");
+	attroff(COLOR_PAIR(TEXT));
 
 	char ch = getch();
-	clear();
+	erase();
 	if (ch == 10)
 		return 1;
 	if (ch == 27)
@@ -56,7 +71,19 @@ int NCURSES::drawBeginWindow()
 void NCURSES::drawEndWindow()
 {
 	erase();
-	mvprintw(0, 0, "GAME OVER");
+	attron(COLOR_PAIR(TEXT));
+	mvprintw(0, 0, " ███▄    █  ██▓ ▄▄▄▄    ▄▄▄▄    ██▓    ▓█████  ██▀███  "); 
+	mvprintw(1, 0, " ██ ▀█   █ ▓██▒▓█████▄ ▓█████▄ ▓██▒    ▓█   ▀ ▓██ ▒ ██▒");
+	mvprintw(2, 0, "▓██  ▀█ ██▒▒██▒▒██▒ ▄██▒██▒ ▄██▒██░    ▒███   ▓██ ░▄█ ▒");
+	mvprintw(3, 0, "▓██▒  ▐▌██▒░██░▒██░█▀  ▒██░█▀  ▒██░    ▒▓█  ▄ ▒██▀▀█▄  ");
+	mvprintw(4, 0, "▒██░   ▓██░░██░░▓█  ▀█▓░▓█  ▀█▓░██████▒░▒████▒░██▓ ▒██▒");
+	mvprintw(5, 0, "░ ▒░   ▒ ▒ ░▓  ░▒▓███▀▒░▒▓███▀▒░ ▒░▓  ░░░ ▒░ ░░ ▒▓ ░▒▓░");
+	mvprintw(6, 0, "░ ░░   ░ ▒░ ▒ ░▒░▒   ░ ▒░▒   ░ ░ ░ ▒  ░ ░ ░  ░  ░▒ ░ ▒░");
+	mvprintw(7, 0, "   ░   ░ ░  ▒ ░ ░    ░  ░    ░   ░ ░      ░     ░░   ░ ");
+	mvprintw(8, 0, "         ░  ░   ░       ░          ░  ░   ░  ░   ░     ");
+	mvprintw(9, 0, "                     ░       ░                         ");
+	mvprintw(11, 23, "GAME OVER");
+	attroff(COLOR_PAIR(TEXT));
 	refresh();
 	sleep(3);
 }
@@ -113,7 +140,7 @@ void NCURSES::draw(Game &game)
 void NCURSES::drawInfo(Game &game)
 {
 	refresh();
-
+	
 	std::string score = "SCORE: " + std::to_string(game.getScore());
 	std::string level = "LEVEL: " + std::to_string(game.getLevel());
 	mvprintw(10, screensize * blocksize * 2 + 5, "NIBBLER GAME");
