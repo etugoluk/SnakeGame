@@ -16,8 +16,10 @@ public:
 	void draw(Game &game);
 	int execute(Game &game);
 
-	void draw_block(int i, int j);
-	void draw_info(Game &game);
+	void drawBlock(int i, int j);
+	void drawInfo(Game &game);
+	int drawBeginWindow();
+	void drawEndWindow();
 };
 
 #endif

@@ -54,7 +54,6 @@ SDL::~SDL()
     SDL_Quit();
 }
 
-
 // void     SDL::set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 // {
 // 	Uint8 *target_pixel = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;

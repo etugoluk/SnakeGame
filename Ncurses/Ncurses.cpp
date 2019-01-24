@@ -26,6 +26,8 @@ NCURSES::NCURSES(Game &game) : IGUI(game)
 
 	blocksize = 1;
 
+	if (!drawBeginWindow())
+    	exit(0);
 	draw(game);
 }
 
@@ -34,7 +36,32 @@ NCURSES::~NCURSES()
 	endwin();
 }
 
-void NCURSES::draw_block(int i, int j)
+int NCURSES::drawBeginWindow()
+{
+	keypad(stdscr, true);
+	nodelay(stdscr, FALSE);
+
+	mvprintw(0, 0, "PLAY (press Enter key)");
+	mvprintw(2, 0, "EXIT (press Esc key)");
+
+	char ch = getch();
+	clear();
+	if (ch == 10)
+		return 1;
+	if (ch == 27)
+		return 0;
+	return 0;
+}
+
+void NCURSES::drawEndWindow()
+{
+	erase();
+	mvprintw(0, 0, "GAME OVER");
+	refresh();
+	sleep(3);
+}
+
+void NCURSES::drawBlock(int i, int j)
 {
 	for (int k = i * blocksize * 2; k < (i + 1) * blocksize * 2; ++k)
 	{
@@ -56,25 +83,25 @@ void NCURSES::draw(Game &game)
 			if (map[j][i] == 's')
 			{
 				attron(COLOR_PAIR(SNAKE));
-				draw_block(i, j);
+				drawBlock(i, j);
 				attroff(COLOR_PAIR(SNAKE));
 			}
 			else if (map[j][i] == 'f')
 			{
 				attron(COLOR_PAIR(FOOD));
-				draw_block(i, j);
+				drawBlock(i, j);
 				attroff(COLOR_PAIR(FOOD));
 			}
 			else if (map[j][i] == 'b')
 			{
 				attron(COLOR_PAIR(BARRIER));
-				draw_block(i, j);
+				drawBlock(i, j);
 				attroff(COLOR_PAIR(BARRIER));
 			}
 			else
 			{
 				attron(COLOR_PAIR(GRASS));
-				draw_block(i, j);
+				drawBlock(i, j);
 				attroff(COLOR_PAIR(GRASS));
 			}
 		}
@@ -83,7 +110,7 @@ void NCURSES::draw(Game &game)
 	refresh();
 }
 
-void NCURSES::draw_info(Game &game)
+void NCURSES::drawInfo(Game &game)
 {
 	refresh();
 
@@ -140,9 +167,12 @@ int NCURSES::execute(Game &game)
     			ch = dir;
 		}
 		if (!game.update(ch))
+		{
+			drawEndWindow();
 			return 0;
+		}
 		draw(game);
-		draw_info(game);
+		drawInfo(game);
 		usleep(300000 / game.getLevel());
 	}
 	return 0;

@@ -14,9 +14,13 @@ IGUI*   chooseLib(int res, int map_size)
     if (res == 2)
         handle = dlopen("SDL/sdl_lib.so", RTLD_LAZY);
 
+    // if (res == 3)
+    //     handle = dlopen("SDL/sfml_lib.so", RTLD_LAZY);
+
     if (!handle)
         throw InvalidLibrary();
 
+    //newGUI - name of function in your library_name.cpp file. You create a pointer to this function and execute it.
     if (( create = reinterpret_cast<IGUI* (*)(Game)>(dlsym(handle, "newGUI")) ) == nullptr)
         throw InvalidLibraryFunction();
 
@@ -27,6 +31,7 @@ int main(int argc, char **argv)
 {
     if (argc != 2)
     {
+        //nibbler instead of snake
         std::cout << "Usage: ./snake [map_size]" << std::endl;
         return 0;
     }
@@ -38,8 +43,9 @@ int main(int argc, char **argv)
         Game game(map_size);
         game.update(' ');
 
-        IGUI   *lib = chooseLib(2, map_size);
-        int res = 0;
+        //default lib = 1 (ncurses)
+        IGUI   *lib = chooseLib(1, map_size);
+        int res = 0; // 1 - ncurses, 2 - sdl, 3 - sfml
         while (1)
         {
             res = lib->execute(game);
