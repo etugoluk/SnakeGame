@@ -18,7 +18,7 @@ public:
 
     void createFood();
     void createBarriers(long size);
-
+    bool checkCoordsForBarriers(int x, int y);
     bool checkCollisions();
 
     void changeLevel();

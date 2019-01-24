@@ -109,6 +109,18 @@ Game::destroyMap() {
     delete [] map;
 }
 
+bool
+Game::checkCoordsForBarriers(int x, int y)
+{
+    if (x >= screenLength - 1 || y >= screenLength - 1)
+        return false;
+    if ((map[x][y] != '.' || map[x + 1][y] != '.' || map[x][y + 1] != '.' || map[x + 1][y + 1] != '.'))
+        return false;
+    if (!score && (x == screenLength / 2 || (x + 1) == screenLength / 2))
+        return false;
+    return true;
+}
+
 void
 Game::createBarriers(long size)
 {
@@ -120,8 +132,7 @@ Game::createBarriers(long size)
         {
             x = rand() % screenLength;
             y = rand() % screenLength;
-            if ((x < screenLength - 1 && y < screenLength - 1) &&
-                (map[x][y] == '.' && map[x + 1][y] == '.' && map[x][y + 1] == '.' && map[x + 1][y + 1] == '.'))
+            if (checkCoordsForBarriers(x, y))
             {
                 map[x][y] = 'b';
                 map[x + 1][y] = 'b';

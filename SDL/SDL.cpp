@@ -40,7 +40,8 @@ SDL::SDL(Game &game) : IGUI(game)
     if (!(font = TTF_OpenFont("SDL/font/BigCaslon.ttf", 26)))
     	throw SDL::FontException();
 
-	draw(game, 0xf4ee00);
+    background_color = 0xf4ee00;
+	draw(game);
 }
 
 SDL::~SDL()
@@ -71,7 +72,7 @@ void     SDL::set_block(SDL_Surface *surface, int i, int j, Uint32 pixel)
 	}
 }
 
-void SDL::draw(Game &game, int color)
+void SDL::draw(Game &game)
 {
 	char** map = game.getMap();
 
@@ -86,7 +87,7 @@ void SDL::draw(Game &game, int color)
 			else if (map[j][i] == 'b')
 				set_block(surface, i * blocksize, j * blocksize, 0x00CCCC);
 			else
-				set_block(surface, i * blocksize, j * blocksize, color);
+				set_block(surface, i * blocksize, j * blocksize, background_color);
 		}
 	}
 
@@ -145,12 +146,11 @@ int SDL::execute(Game &game)
 	int g = 255;
 	int b = 246;
 	int k = 1;
-
 	int *n = &b;
-	int counter;
+
 	while (1)
 	{
-		counter = r * 256 * 256 + g * 256 + b;
+		background_color = r * 256 * 256 + g * 256 + b;
 		SDL_Event e;
 		switch (game.snake.getHeadDirection())
     	{
@@ -198,7 +198,7 @@ int SDL::execute(Game &game)
 	    }
     	if (!game.update(ch))
         	return 0;
-        draw(game, counter);
+        draw(game);
         usleep(300000 / game.getLevel());
         *n += k;
         if (*n == 255 || *n == 246)

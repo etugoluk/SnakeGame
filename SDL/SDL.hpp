@@ -10,6 +10,7 @@
 class SDL : public IGUI
 {
 	int blocksize;
+	int background_color;
 
 	SDL_Window *window;
 	SDL_Surface *surface;
@@ -32,8 +33,7 @@ public:
 	SDL(Game &game);
 	~SDL();
 
-	void draw(Game &game, int color);
-	void draw(Game &game) {std::cout << game.getLevel() << std::endl;}
+	void draw(Game &game);
 	int execute(Game &game);
 
 	// void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
