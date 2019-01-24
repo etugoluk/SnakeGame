@@ -14,7 +14,9 @@ class SDL : public IGUI
 
 	SDL_Window *window;
 	SDL_Surface *surface;
+	SDL_Surface* TTF_TextSolid;
 	SDL_Color color_text;
+	SDL_Event e;
 
 	SDL_Rect block;
 
@@ -34,6 +36,8 @@ public:
 	~SDL();
 
 	void draw(Game &game);
+	int drawBeginWindow();
+	void drawEndWindow();
 	int execute(Game &game);
 	void getColor();
 

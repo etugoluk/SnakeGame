@@ -14,13 +14,11 @@ IGUI*   chooseLib(int res, int map_size)
     if (res == 2)
         handle = dlopen("SDL/sdl_lib.so", RTLD_LAZY);
 
-    if (!handle) {
-        fprintf(stderr, "%s\n", dlerror());
-        exit(EXIT_FAILURE);
-    }
+    if (!handle)
+        throw InvalidLibrary();
 
     if (( create = reinterpret_cast<IGUI* (*)(Game)>(dlsym(handle, "newGUI")) ) == nullptr)
-        std::cerr << "open_lib: dlsym : " << dlerror() << std::endl;
+        throw InvalidLibraryFunction();
 
     return create(map_size);
 }
@@ -40,8 +38,7 @@ int main(int argc, char **argv)
         Game game(map_size);
         game.update(' ');
 
-        IGUI   *lib = chooseLib(1, map_size);
-
+        IGUI   *lib = chooseLib(2, map_size);
         int res = 0;
         while (1)
         {

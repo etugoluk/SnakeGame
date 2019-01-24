@@ -9,4 +9,16 @@ class InvalidSize : public std::exception
 		virtual const char *what() const throw();
 };
 
+class InvalidLibrary : public std::exception
+{
+	public:
+		virtual const char *what() const throw();
+};
+
+class InvalidLibraryFunction : public std::exception
+{
+	public:
+		virtual const char *what() const throw();
+};
+
 #endif

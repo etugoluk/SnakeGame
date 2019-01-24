@@ -41,6 +41,8 @@ SDL::SDL(Game &game) : IGUI(game)
     if (!(font = TTF_OpenFont("SDL/font/BigCaslon.ttf", 26)))
     	throw SDL::FontException();
 
+    if (!drawBeginWindow())
+    	exit(0);
 	draw(game);
 }
 
@@ -59,6 +61,64 @@ SDL::~SDL()
 // 	*(Uint32 *)target_pixel = pixel;
 // }
 	
+int SDL::drawBeginWindow()
+{
+	SDL_Rect rect = {0, 0, INFO_SIZE + SCREENWIDTH, SCREENWIDTH};
+	SDL_FillRect(surface, &rect, 0x009999);
+
+	SDL_Rect label = {SCREENWIDTH / 2, 50, INFO_SIZE, 30};
+	SDL_Rect play = {SCREENWIDTH / 2, SCREENWIDTH / 2, INFO_SIZE, 30};
+    SDL_Rect exit = {SCREENWIDTH / 2, SCREENWIDTH / 2 + 50, INFO_SIZE, 30};
+
+	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "NIBBLER GAME", color_text)))
+		throw SDL::SurfaceException();
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &label);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "PLAY (press Enter)", color_text)))
+		throw SDL::SurfaceException();
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &play);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "EXIT (press Escape)", color_text)))
+		throw SDL::SurfaceException();
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &exit);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	SDL_UpdateWindowSurface(window);
+	while (1)
+	{
+		while (SDL_PollEvent(&e))
+		{
+			if (e.type == SDL_KEYDOWN)
+			{
+				if (e.key.keysym.sym == SDLK_RETURN)
+					return 1;
+				else if (e.key.keysym.sym == SDLK_ESCAPE)
+					return 0;
+			}
+		    if (e.type == SDL_QUIT)
+		        return 0;
+		}
+	}
+    return 0;
+}
+
+void SDL::drawEndWindow()
+{
+	SDL_Rect rect = {0, 0, INFO_SIZE + SCREENWIDTH, SCREENWIDTH};
+	SDL_FillRect(surface, &rect, 0x009999);
+
+	SDL_Rect label = {SCREENWIDTH / 2, 50, INFO_SIZE, 30};
+
+	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "GAME OVER", color_text)))
+		throw SDL::SurfaceException();
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &label);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	SDL_UpdateWindowSurface(window);
+	sleep(3);
+}
 
 void     SDL::set_block(SDL_Surface *surface, int i, int j, Uint32 pixel)
 {
@@ -92,7 +152,6 @@ void SDL::draw(Game &game)
 	}
 
 	std::string inf;
-	SDL_Surface* TTF_TextSolid;
 
 	SDL_Rect rect = {blocksize * screensize, 0, INFO_SIZE, SCREENWIDTH};
 	SDL_FillRect(surface, &rect, 0x009999);
@@ -166,7 +225,7 @@ int SDL::execute(Game &game)
 
 	while (1)
 	{
-		SDL_Event e;
+		// SDL_Event e;
 		switch (game.snake.getHeadDirection())
     	{
     		case Top:
@@ -203,7 +262,10 @@ int SDL::execute(Game &game)
                 return 0;
 	    }
     	if (!game.update(ch))
+    	{
+    		drawEndWindow();
         	return 0;
+    	}
         draw(game);
         usleep(300000 / game.getLevel());
         getColor();
