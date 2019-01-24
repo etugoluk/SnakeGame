@@ -163,22 +163,27 @@ Game::createFood()
 }
 
 char**
-Game::getMap()
+Game::getMap() const
 {
     return map;
 }
 
-int Game::getLevel()
+int Game::getLevel() const
 {
     return level;
 }
 
-int Game::getScore()
+int Game::getScore() const
 {
     return score;
 }
 
-int Game::getScreenLength()
+int Game::getScreenLength() const
 {
     return screenLength;
+}
+
+Snake const & Game::getSnake() const
+{
+    return snake;
 }

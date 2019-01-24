@@ -225,7 +225,7 @@ int SDL::execute(Game &game)
 	while (1)
 	{
 		// SDL_Event e;
-		switch (game.snake.getHeadDirection())
+		switch (game.getSnake().getHeadDirection())
     	{
     		case Top:
         		ch = 126;

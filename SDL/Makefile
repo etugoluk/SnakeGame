@@ -17,8 +17,6 @@ SRC_FILES	=	../src/Game.cpp \
 
 INC_FILES	=	SDL.hpp
 
-INC_DIR		=	../includes
-
 OBJ_FILES	= 	$(SRC_FILES:.cpp=.cpp.o)
 
 SDL2 		=	SDL2
@@ -30,7 +28,7 @@ $(NAME): $(OBJ_FILES)
 	@ $(COM) $(FLAGS) $(SDL_FRM) $(SDL_LINK) $(SDL_LNK_TTF) $(LIB_FLAG) $(OBJ_FILES) -o $(NAME)
 
 %.cpp.o:%.cpp
-	@ $(COM) $(FLAGS) $(SDL_FRM) -c -o $@ $< -I $(INC_DIR)
+	@ $(COM) $(FLAGS) $(SDL_FRM) -c -o $@ $<
 
 
 sdl:

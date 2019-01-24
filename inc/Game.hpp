@@ -25,18 +25,19 @@ public:
 
     void changeLevel();
 
-    char **getMap();
-    int getLevel();
-    int getScore();
-    int getScreenLength();
+    char **getMap() const;
+    int getLevel() const;
+    int getScore() const;
+    int getScreenLength() const;
+    Snake const & getSnake() const;
 
-    Snake snake;
 private:
     Game();
     char **map;
     int level;
     int score;
     long screenLength;
+    Snake snake;
 };
 
 #endif //NIBBLER_GAME_HPP

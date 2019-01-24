@@ -42,9 +42,9 @@ public:
 
     void showBodyCoordinates();
 
-    int getLength();
-    snakeDirection getHeadDirection();
-    std::vector<std::pair<int, int> > getBody();
+    int getLength() const;
+    snakeDirection getHeadDirection() const;
+    std::vector<std::pair<int, int> > getBody() const;
 
 private:
     long length;

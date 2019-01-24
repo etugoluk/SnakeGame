@@ -43,6 +43,7 @@ int NCURSES::drawBeginWindow()
 	keypad(stdscr, true);
 	nodelay(stdscr, FALSE);
 
+	erase();
 	attron(COLOR_PAIR(TEXT));
 	mvprintw(0, 0, " ███▄    █  ██▓ ▄▄▄▄    ▄▄▄▄    ██▓    ▓█████  ██▀███  "); 
 	mvprintw(1, 0, " ██ ▀█   █ ▓██▒▓█████▄ ▓█████▄ ▓██▒    ▓█   ▀ ▓██ ▒ ██▒");
@@ -94,7 +95,7 @@ void NCURSES::drawBlock(int i, int j)
 	{
 		for (int l = j * blocksize; l < (j + 1) * blocksize; ++l)
 		{
-			mvaddch(l, k, ' ');
+			mvaddch(l + 10, k, ' ');
 		}
 	}
 }
@@ -102,6 +103,19 @@ void NCURSES::drawBlock(int i, int j)
 void NCURSES::draw(Game &game)
 {
 	char **map = game.getMap();
+
+	attron(COLOR_PAIR(TEXT));
+	mvprintw(0, 0, " ███▄    █  ██▓ ▄▄▄▄    ▄▄▄▄    ██▓    ▓█████  ██▀███  "); 
+	mvprintw(1, 0, " ██ ▀█   █ ▓██▒▓█████▄ ▓█████▄ ▓██▒    ▓█   ▀ ▓██ ▒ ██▒");
+	mvprintw(2, 0, "▓██  ▀█ ██▒▒██▒▒██▒ ▄██▒██▒ ▄██▒██░    ▒███   ▓██ ░▄█ ▒");
+	mvprintw(3, 0, "▓██▒  ▐▌██▒░██░▒██░█▀  ▒██░█▀  ▒██░    ▒▓█  ▄ ▒██▀▀█▄  ");
+	mvprintw(4, 0, "▒██░   ▓██░░██░░▓█  ▀█▓░▓█  ▀█▓░██████▒░▒████▒░██▓ ▒██▒");
+	mvprintw(5, 0, "░ ▒░   ▒ ▒ ░▓  ░▒▓███▀▒░▒▓███▀▒░ ▒░▓  ░░░ ▒░ ░░ ▒▓ ░▒▓░");
+	mvprintw(6, 0, "░ ░░   ░ ▒░ ▒ ░▒░▒   ░ ▒░▒   ░ ░ ░ ▒  ░ ░ ░  ░  ░▒ ░ ▒░");
+	mvprintw(7, 0, "   ░   ░ ░  ▒ ░ ░    ░  ░    ░   ░ ░      ░     ░░   ░ ");
+	mvprintw(8, 0, "         ░  ░   ░       ░          ░  ░   ░  ░   ░     ");
+	mvprintw(9, 0, "                     ░       ░                         ");
+	attroff(COLOR_PAIR(TEXT));
 
 	for (int i = 0; i < screensize; ++i)
 	{
@@ -143,9 +157,11 @@ void NCURSES::drawInfo(Game &game)
 	
 	std::string score = "SCORE: " + std::to_string(game.getScore());
 	std::string level = "LEVEL: " + std::to_string(game.getLevel());
-	mvprintw(10, screensize * blocksize * 2 + 5, "NIBBLER GAME");
+
+	attron(COLOR_PAIR(TEXT));
 	mvprintw(12, screensize * blocksize * 2 + 5, score.c_str());
 	mvprintw(14, screensize * blocksize * 2 + 5, level.c_str());
+	attroff(COLOR_PAIR(TEXT));
 }
 
 int NCURSES::execute(Game &game)
@@ -157,7 +173,7 @@ int NCURSES::execute(Game &game)
 
 	while (1)
 	{
-		switch (game.snake.getHeadDirection())
+		switch (game.getSnake().getHeadDirection())
 		{
     		case Top:
         		dir = 126;
