@@ -9,13 +9,10 @@ IGUI*   chooseLib(int res, int map_size)
     void *handle;
 
     if (res == 1)
-    {
         handle = dlopen("Ncurses/ncurses_lib.so", RTLD_LAZY);
-    }
     if (res == 2)
-    {
         handle = dlopen("SDL/sdl_lib.so", RTLD_LAZY);
-    }
+
     if (!handle) {
         fprintf(stderr, "%s\n", dlerror());
         exit(EXIT_FAILURE);
@@ -35,7 +32,7 @@ int main()
         Game game(map_size);
         game.update(' ');
 
-        IGUI   *lib = chooseLib(2, map_size);
+        IGUI   *lib = chooseLib(1, map_size);
 
         int res = 0;
         while (1)

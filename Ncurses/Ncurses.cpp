@@ -80,9 +80,7 @@ void NCURSES::draw(Game &game)
 		}
 		printw("\n");
 	}
-
 	refresh();
-    getch();
 }
 
 void NCURSES::draw_info(Game &game)
@@ -99,54 +97,51 @@ void NCURSES::draw_info(Game &game)
 int NCURSES::execute(Game &game)
 {
 	int ch = 0;
+	int dir = 0;
 	keypad(stdscr, true);
-	// nodelay(stdscr, TRUE);
+	nodelay(stdscr, TRUE);
 
 	while (ch != 'q' && ch != KEY_EXIT)
 	{
-		// if ((ch = getch()) == ERR)
-		// {
-		// 	switch (game.snake.getHeadDirection())
-		// 	{
-	 //    		case Top:
-	 //        		ch = 126;
-	 //        		break;
-	 //        	case Bottom:
-	 //        		ch = 125;
-	 //        		break;
-	 //        	case Left:
-	 //        		ch = 123;
-	 //        		break;
-	 //        	case Right:
-	 //        		ch = 124;
-	 //        		break;
-		// 	 }
-		// 	 break;
-  // //       }
-		ch = getch();
-		switch (ch)
+		switch (game.snake.getHeadDirection())
 		{
-			case KEY_RIGHT:
-				ch = 124;
-				break;
-			case KEY_LEFT:
-				ch = 123;
-				break;
-			case KEY_UP:
-				ch = 126;
-				break;
-			case KEY_DOWN:
-				ch = 125;
-				break;
-			case '2':
-				return 2;
-				break;
+    		case Top:
+        		dir = 126;
+        		break;
+        	case Bottom:
+        		dir = 125;
+        		break;
+        	case Left:
+        		dir = 123;
+        		break;
+        	case Right:
+        		dir = 124;
+        		break;
+		 }
+		if ((ch = getch()) == ERR)
+			ch = dir;
+		else
+		{
+			if (ch == KEY_RIGHT && dir != 123)
+    			ch = 124;
+    		else if (ch == KEY_DOWN && dir != 126)
+    			ch = 125;
+    		else if (ch == KEY_LEFT && dir != 124)
+    			ch = 123;
+    		else if (ch == KEY_UP && dir != 125)
+    			ch = 126;
+    		else if (ch == KEY_EXIT)
+    			return 0;
+    		else if (ch == '2')
+    			return 2;
+    		else
+    			ch = dir;
 		}
 		if (!game.update(ch))
 			return 0;
 		draw(game);
 		draw_info(game);
-		// usleep(300000);
+		usleep(300000 / game.getLevel());
 	}
 	return 0;
 }
