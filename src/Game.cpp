@@ -207,7 +207,7 @@ Game::updateMaxScore() {
 
 void 
 Game::saveMaxScore(){
-    if (stoi(maxScore) < score)
+    if (std::stoi(maxScore) < score)
         maxScore = std::to_string(score);
     std::ofstream ofs;
     ofs.open("maxScore.txt", std::ofstream::out | std::ofstream::trunc);

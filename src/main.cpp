@@ -53,7 +53,7 @@ int main(int argc, char **argv)
             if (!res)
             {
                 delete lib;
-                exit(0);
+                break ;
             }
             if (res > 0)
             {

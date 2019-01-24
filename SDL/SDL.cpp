@@ -163,7 +163,9 @@ void SDL::draw(Game &game)
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &label);
 	SDL_FreeSurface(TTF_TextSolid);
 
-	inf = "Max score: " + game.getMaxScore();
+
+	int maxscore = std::stoi(game.getMaxScore());
+	inf = "Max score: " + std::to_string(maxscore);
 	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text)))
 		throw SDL::SurfaceException();
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &maxScore);
