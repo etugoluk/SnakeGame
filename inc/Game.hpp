@@ -15,6 +15,8 @@ public:
     void destroyMap();
     void fillMap();
     void printMap();
+    void fillSnakeWith(char c);
+    void moveSnake(char c);
 
     void createFood();
     void createBarriers(long size);
@@ -24,13 +26,11 @@ public:
     void changeLevel();
 
     char **getMap();
-
-    Snake snake;
-
     int getLevel();
     int getScore();
     int getScreenLength();
 
+    Snake snake;
 private:
     Game();
     char **map;

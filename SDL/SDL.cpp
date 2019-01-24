@@ -21,6 +21,7 @@ SDL::SDL(Game &game) : IGUI(game)
     blocksize = SCREENWIDTH / screensize;
 
 	color_text = {255, 255, 255, 255};
+	background_color = 0xF6FFF6;
     block = {0, 0, blocksize, blocksize};
 
     int distance = 40;
@@ -40,7 +41,6 @@ SDL::SDL(Game &game) : IGUI(game)
     if (!(font = TTF_OpenFont("SDL/font/BigCaslon.ttf", 26)))
     	throw SDL::FontException();
 
-    background_color = 0xF6FFF6;
 	draw(game);
 }
 
