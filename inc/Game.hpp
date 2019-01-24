@@ -4,6 +4,10 @@
 
 #include "Snake.hpp"
 #include <string>
+#include <unistd.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 class Game{
 public:
@@ -29,7 +33,11 @@ public:
     int getLevel() const;
     int getScore() const;
     int getScreenLength() const;
+    std::string getMaxScore() const;
     Snake const & getSnake() const;
+
+    void updateMaxScore();
+    void saveMaxScore();
 
 private:
     Game();
@@ -38,6 +46,7 @@ private:
     int score;
     long screenLength;
     Snake snake;
+    std::string maxScore;
 };
 
 #endif //NIBBLER_GAME_HPP

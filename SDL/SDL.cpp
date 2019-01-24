@@ -141,6 +141,8 @@ void SDL::draw(Game &game)
 		{
 			if (map[j][i] == 's')
 				set_block(surface, i * blocksize, j * blocksize, 0xf4ee00);
+			else if (map[j][i] == 'o')
+				set_block(surface, i * blocksize, j * blocksize, 0xC9C900); //
 			else if (map[j][i] == 'f')
 				set_block(surface, i * blocksize, j * blocksize, 0xff6600);
 			else if (map[j][i] == 'b')

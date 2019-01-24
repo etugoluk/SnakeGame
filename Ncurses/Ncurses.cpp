@@ -6,6 +6,7 @@
 #define FOOD		3
 #define BARRIER		4
 #define TEXT		5
+#define HEADSNAKE	6
 
 extern "C" IGUI* newGUI(Game &game)
 {
@@ -25,6 +26,7 @@ NCURSES::NCURSES(Game &game) : IGUI(game)
 	init_pair(FOOD, COLOR_RED, COLOR_RED);
 	init_pair(BARRIER, COLOR_BLUE, COLOR_BLUE);
 	init_pair(TEXT, COLOR_GREEN, COLOR_BLACK);
+	init_pair(HEADSNAKE, COLOR_MAGENTA, COLOR_MAGENTA);
 
 	blocksize = 1;
 
@@ -126,6 +128,12 @@ void NCURSES::draw(Game &game)
 				attron(COLOR_PAIR(SNAKE));
 				drawBlock(i, j);
 				attroff(COLOR_PAIR(SNAKE));
+			}
+			else if (map[j][i] == 'o')
+			{
+				attron(COLOR_PAIR(HEADSNAKE));
+				drawBlock(i, j);
+				attroff(COLOR_PAIR(HEADSNAKE));
 			}
 			else if (map[j][i] == 'f')
 			{
