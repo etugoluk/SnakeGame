@@ -101,7 +101,7 @@ int NCURSES::execute(Game &game)
 	keypad(stdscr, true);
 	nodelay(stdscr, TRUE);
 
-	while (ch != 'q' && ch != KEY_EXIT)
+	while (1)
 	{
 		switch (game.snake.getHeadDirection())
 		{
@@ -130,7 +130,9 @@ int NCURSES::execute(Game &game)
     			ch = 123;
     		else if (ch == KEY_UP && dir != 125)
     			ch = 126;
-    		else if (ch == KEY_EXIT)
+    		else if (ch == 27)
+    			return 0;
+    		else if (ch == 'q')
     			return 0;
     		else if (ch == '2')
     			return 2;
