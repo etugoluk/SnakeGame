@@ -5,7 +5,7 @@ INC_DIR =   ./inc/
 
 CC      =   clang++
 FLAGS   =   -Wall -Wextra -Werror
-SRC     =   main.cpp Snake.cpp Game.cpp
+SRC     =   main.cpp Snake.cpp Game.cpp Exception.cpp
 OBJ     =   $(addprefix $(OBJ_DIR), $(SRC:.cpp=.o))
 HDRS    =   -I $(INC_DIR)
 

@@ -2,6 +2,7 @@
 #include "../inc/Game.hpp"
 #include "../inc/IGUI.hpp"
 #include <dlfcn.h>
+#include "../inc/Exception.hpp"
 
 IGUI*   chooseLib(int res, int map_size)
 {
@@ -24,11 +25,18 @@ IGUI*   chooseLib(int res, int map_size)
     return create(map_size);
 }
 
-int main()
+int main(int argc, char **argv)
 {
+    if (argc != 2)
+    {
+        std::cout << "Usage: ./snake [map_size]" << std::endl;
+        return 0;
+    }
     try
     {
-        int map_size = 30;
+        int map_size = std::stoi(argv[1]);
+        if (map_size < 20 || map_size > 50)
+            throw InvalidSize();
         Game game(map_size);
         game.update(' ');
 

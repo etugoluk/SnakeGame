@@ -24,7 +24,7 @@ NCURSES::NCURSES(Game &game) : IGUI(game)
 	init_pair(FOOD, COLOR_RED, COLOR_RED);
 	init_pair(BARRIER, COLOR_BLUE, COLOR_BLUE);
 
-	blocksize = 2;
+	blocksize = 1;
 
 	draw(game);
 }
