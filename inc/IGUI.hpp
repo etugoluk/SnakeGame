@@ -14,8 +14,6 @@ public:
 	IGUI(Game &game) : screensize(game.getScreenLength()) {}
 
 	virtual ~IGUI(){}
-	// virtual void init(Game &game) = 0;
-	// virtual void destroy() = 0;
 	virtual void draw(Game &game) = 0;
 	virtual int execute(Game &game) = 0;
 };

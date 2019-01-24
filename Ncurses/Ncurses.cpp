@@ -163,12 +163,14 @@ void NCURSES::drawInfo(Game &game)
 {
 	refresh();
 	
+	std::string maxScore = "MAX SCORE: " + game.getMaxScore();
 	std::string score = "SCORE: " + std::to_string(game.getScore());
 	std::string level = "LEVEL: " + std::to_string(game.getLevel());
 
 	attron(COLOR_PAIR(TEXT));
-	mvprintw(12, screensize * blocksize * 2 + 5, score.c_str());
-	mvprintw(14, screensize * blocksize * 2 + 5, level.c_str());
+	mvprintw(12, screensize * blocksize * 2 + 5, maxScore.c_str());
+	mvprintw(14, screensize * blocksize * 2 + 5, score.c_str());
+	mvprintw(16, screensize * blocksize * 2 + 5, level.c_str());
 	attroff(COLOR_PAIR(TEXT));
 }
 

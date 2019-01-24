@@ -189,6 +189,8 @@ Snake const & Game::getSnake() const
     return snake;
 }
 
+std::string
+Game::getMaxScore() const{ return maxScore; }
 
 void
 Game::updateMaxScore() {

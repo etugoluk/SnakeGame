@@ -24,6 +24,7 @@ class SDL : public IGUI
 	SDL_Rect label;
 	SDL_Rect level;
 	SDL_Rect score;
+	SDL_Rect maxScore;
 	SDL_Rect change;
 	SDL_Rect gui1;
 	SDL_Rect gui2;

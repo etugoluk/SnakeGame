@@ -27,8 +27,9 @@ SDL::SDL(Game &game) : IGUI(game)
     int distance = 40;
 
     label = {blocksize * screensize + 50, 30, INFO_SIZE, 30};
-    score = {blocksize * screensize + distance + 70, SCREENWIDTH / 2 - 100, INFO_SIZE, 40};
-    level = {blocksize * screensize + distance + 70, SCREENWIDTH / 2 - 70, INFO_SIZE, 40};
+    maxScore = {blocksize * screensize + distance + 20, SCREENWIDTH / 2 - 130, INFO_SIZE, 30};
+    score = {blocksize * screensize + distance + 20, SCREENWIDTH / 2 - 100, INFO_SIZE, 40};
+    level = {blocksize * screensize + distance + 20, SCREENWIDTH / 2 - 70, INFO_SIZE, 40};
 
     change = {blocksize * screensize + distance, SCREENWIDTH / 2 + 120, INFO_SIZE, 30};
     gui1 = {blocksize * screensize + distance, SCREENWIDTH / 2 + 150, INFO_SIZE, 30};
@@ -160,6 +161,12 @@ void SDL::draw(Game &game)
 	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, "NIBBLER GAME", color_text)))
 		throw SDL::SurfaceException();
 	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &label);
+	SDL_FreeSurface(TTF_TextSolid);
+
+	inf = "Max score: " + game.getMaxScore();
+	if (!(TTF_TextSolid = TTF_RenderText_Solid(font, inf.c_str(), color_text)))
+		throw SDL::SurfaceException();
+	SDL_BlitSurface(TTF_TextSolid, NULL, surface, &maxScore);
 	SDL_FreeSurface(TTF_TextSolid);
 
 	inf = "Score: " + std::to_string(game.getScore());
