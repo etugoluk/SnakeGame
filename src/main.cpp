@@ -29,26 +29,33 @@ IGUI*   chooseLib(int res, int map_size)
 
 int main()
 {
-    int map_size = 30;
-    Game game(map_size);
-    game.update(' ');
-
-    IGUI   *lib = chooseLib(2, map_size);
-
-    int res = 0;
-    while (1)
+    try
     {
-        res = lib->execute(game);
-        if (!res)
+        int map_size = 30;
+        Game game(map_size);
+        game.update(' ');
+
+        IGUI   *lib = chooseLib(2, map_size);
+
+        int res = 0;
+        while (1)
         {
-            delete lib;
-            exit(0);
+            res = lib->execute(game);
+            if (!res)
+            {
+                delete lib;
+                exit(0);
+            }
+            if (res > 0)
+            {
+                delete lib;
+                lib = chooseLib(res, map_size);
+            }
         }
-        if (res > 0)
-        {
-            delete lib;
-            lib = chooseLib(res, map_size);
-        }
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
     }
 
     return (0);

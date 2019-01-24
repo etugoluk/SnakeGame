@@ -9,12 +9,10 @@
 
 class SDL : public IGUI
 {
-	// int screensize;
 	int blocksize;
 
 	SDL_Window *window;
 	SDL_Surface *surface;
-	// SDL_Surface *info_block;
 	SDL_Color color_text;
 
 	SDL_Rect block;
@@ -40,6 +38,31 @@ public:
 
 	// void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 	void set_block(SDL_Surface *surface, int i, int j, Uint32 pixel);
+
+	class InitException :public std::exception {
+	public:
+		virtual const char    *what() const throw();
+	};
+
+	class CreateWindowException :public std::exception {
+	public:
+		virtual const char    *what() const throw();
+	};
+
+	class TTFException :public std::exception {
+	public:
+		virtual const char    *what() const throw();
+	};
+
+	class FontException :public std::exception {
+	public:
+		virtual const char    *what() const throw();
+	};
+
+	class SurfaceException :public std::exception {
+	public:
+		virtual const char    *what() const throw();
+	};
 };
 
 #endif
